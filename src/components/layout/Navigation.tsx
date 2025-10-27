@@ -1,106 +1,106 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Home, 
-  Table, 
-  Utensils, 
-  ChefHat, 
-  DollarSign, 
-  Calendar, 
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Home,
+  Table,
+  Utensils,
+  ChefHat,
+  DollarSign,
+  Calendar,
   BarChart3,
   Users,
-  Cocktail,
-  Menu as MenuIcon
-} from 'lucide-react'
+  Martini,
+  Menu as MenuIcon,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu';
 
 interface NavigationProps {
-  notifications?: number
+  notifications?: number;
 }
 
 export function Navigation({ notifications = 0 }: NavigationProps) {
-  const pathname = usePathname()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigationItems = [
     {
       name: 'Dashboard',
       href: '/',
       icon: Home,
-      description: 'Vue d\'ensemble'
+      description: "Vue d'ensemble",
     },
     {
       name: 'Tables',
       href: '/tables',
       icon: Table,
-      description: 'Gestion des tables'
+      description: 'Gestion des tables',
     },
     {
       name: 'Menu',
       href: '/menu',
       icon: Utensils,
-      description: 'Carte et produits'
+      description: 'Carte et produits',
     },
     {
       name: 'Commandes',
       href: '/orders',
       icon: Utensils,
-      description: 'Prise de commandes'
+      description: 'Prise de commandes',
     },
     {
       name: 'Cuisine',
       href: '/kitchen',
       icon: ChefHat,
-      description: 'Écran cuisine'
+      description: 'Écran cuisine',
     },
     {
       name: 'Bar',
       href: '/bar',
-      icon: Cocktail,
-      description: 'Gestion du bar'
+      icon: Martini,
+      description: 'Gestion du bar',
     },
     {
       name: 'Service',
       href: '/server',
       icon: Users,
-      description: 'Service en salle'
+      description: 'Service en salle',
     },
     {
       name: 'Caisse',
       href: '/payment',
       icon: DollarSign,
-      description: 'Paiements'
+      description: 'Paiements',
     },
     {
       name: 'Réservations',
       href: '/reservations',
       icon: Calendar,
-      description: 'Gestion des réservations'
+      description: 'Gestion des réservations',
     },
     {
       name: 'Analytics',
       href: '/analytics',
       icon: BarChart3,
-      description: 'Statistiques'
-    }
-  ]
+      description: 'Statistiques',
+    },
+  ];
 
   const isActive = (href: string) => {
     if (href === '/') {
-      return pathname === '/'
+      return pathname === '/';
     }
-    return pathname.startsWith(href)
-  }
+    return pathname.startsWith(href);
+  };
 
   return (
     <nav className="bg-white border-b">
@@ -132,7 +132,7 @@ export function Navigation({ notifications = 0 }: NavigationProps) {
                 {item.name}
               </Link>
             ))}
-            
+
             {/* More dropdown for remaining items */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -147,9 +147,7 @@ export function Navigation({ notifications = 0 }: NavigationProps) {
                     <Link
                       href={item.href}
                       className={`flex items-center gap-2 w-full ${
-                        isActive(item.href)
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'text-gray-600'
+                        isActive(item.href) ? 'bg-blue-100 text-blue-700' : 'text-gray-600'
                       }`}
                     >
                       <item.icon className="h-4 w-4" />
@@ -209,5 +207,5 @@ export function Navigation({ notifications = 0 }: NavigationProps) {
         )}
       </div>
     </nav>
-  )
+  );
 }

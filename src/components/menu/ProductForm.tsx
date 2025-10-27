@@ -1,20 +1,26 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ProductData } from './ProductCard'
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ProductData } from './ProductCard';
 
 interface ProductFormProps {
-  product?: ProductData | null
-  categories: { id: string; name: string }[]
-  onSubmit: (product: any) => void
-  onCancel: () => void
+  product?: ProductData | null;
+  categories: { id: string; name: string }[];
+  onSubmit: (product: any) => void;
+  onCancel: () => void;
 }
 
 export function ProductForm({ product, categories, onSubmit, onCancel }: ProductFormProps) {
@@ -27,7 +33,7 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
     isAvailable: true,
     allergens: '',
     preparationTime: '',
-  })
+  });
 
   useEffect(() => {
     if (product) {
@@ -40,13 +46,13 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
         isAvailable: product.isAvailable,
         allergens: product.allergens || '',
         preparationTime: product.preparationTime?.toString() || '',
-      })
+      });
     }
-  }, [product])
+  }, [product]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     const productData = {
       name: formData.name,
       description: formData.description || undefined,
@@ -56,28 +62,26 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
       isAvailable: formData.isAvailable,
       allergens: formData.allergens || undefined,
       preparationTime: formData.preparationTime ? parseInt(formData.preparationTime) : undefined,
-    }
+    };
 
     if (product) {
-      onSubmit({ ...productData, id: product.id })
+      onSubmit({ ...productData, id: product.id });
     } else {
-      onSubmit(productData)
+      onSubmit(productData);
     }
-  }
+  };
 
   const handleChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {product ? 'Modifier le produit' : 'Créer un nouveau produit'}
-          </DialogTitle>
+          <DialogTitle>{product ? 'Modifier le produit' : 'Créer un nouveau produit'}</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Nom *</Label>
@@ -115,7 +119,7 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
                 min="0"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="preparationTime">Temps de préparation (min)</Label>
               <Input
@@ -132,7 +136,10 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
 
           <div className="space-y-2">
             <Label htmlFor="categoryId">Catégorie *</Label>
-            <Select value={formData.categoryId} onValueChange={(value) => handleChange('categoryId', value)}>
+            <Select
+              value={formData.categoryId}
+              onValueChange={(value) => handleChange('categoryId', value)}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionner une catégorie" />
               </SelectTrigger>
@@ -165,9 +172,7 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
               onChange={(e) => handleChange('allergens', e.target.value)}
               placeholder="Gluten, Lactose, Fruits à coque"
             />
-            <p className="text-xs text-gray-500">
-              Séparez les allergènes par des virgules
-            </p>
+            <p className="text-xs text-gray-500">Séparez les allergènes par des virgules</p>
           </div>
 
           <div className="flex items-center space-x-2">
@@ -183,12 +188,10 @@ export function ProductForm({ product, categories, onSubmit, onCancel }: Product
             <Button type="button" variant="outline" onClick={onCancel}>
               Annuler
             </Button>
-            <Button type="submit">
-              {product ? 'Modifier' : 'Créer'}
-            </Button>
+            <Button type="submit">{product ? 'Modifier' : 'Créer'}</Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

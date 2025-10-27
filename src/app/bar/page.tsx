@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { Progress } from '@/components/ui/progress'
-import { 
-  Cocktail, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle, 
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
+import {
+  Martini,
+  Clock,
+  CheckCircle,
+  AlertCircle,
   Plus,
   Search,
   Wine,
@@ -23,52 +23,52 @@ import {
   Package,
   TrendingUp,
   Bell,
-  Users
-} from 'lucide-react'
+  Users,
+} from 'lucide-react';
 
 interface DrinkOrder {
-  id: string
-  tableNumber: number
-  items: DrinkItem[]
-  status: 'pending' | 'preparing' | 'ready' | 'served'
-  priority: 'low' | 'normal' | 'high'
-  orderTime: string
-  serverName: string
-  notes?: string
+  id: string;
+  tableNumber: number;
+  items: DrinkItem[];
+  status: 'pending' | 'preparing' | 'ready' | 'served';
+  priority: 'low' | 'normal' | 'high';
+  orderTime: string;
+  serverName: string;
+  notes?: string;
 }
 
 interface DrinkItem {
-  id: string
-  name: string
-  category: string
-  quantity: number
-  preparationTime: number
-  ingredients: Ingredient[]
-  instructions?: string
+  id: string;
+  name: string;
+  category: string;
+  quantity: number;
+  preparationTime: number;
+  ingredients: Ingredient[];
+  instructions?: string;
 }
 
 interface Ingredient {
-  id: string
-  name: string
-  stockLevel: number
-  unit: string
-  minStock: number
-  price: number
+  id: string;
+  name: string;
+  stockLevel: number;
+  unit: string;
+  minStock: number;
+  price: number;
 }
 
 interface StockAlert {
-  ingredientId: string
-  ingredientName: string
-  currentStock: number
-  minStock: number
-  unit: string
+  ingredientId: string;
+  ingredientName: string;
+  currentStock: number;
+  minStock: number;
+  unit: string;
 }
 
 export default function BarScreen() {
-  const [selectedOrder, setSelectedOrder] = useState<DrinkOrder | null>(null)
-  const [activeTab, setActiveTab] = useState('orders')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [notifications, setNotifications] = useState(2)
+  const [selectedOrder, setSelectedOrder] = useState<DrinkOrder | null>(null);
+  const [activeTab, setActiveTab] = useState('orders');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [notifications, setNotifications] = useState(2);
 
   // Mock data for orders
   const drinkOrders: DrinkOrder[] = [
@@ -83,11 +83,18 @@ export default function BarScreen() {
           quantity: 2,
           preparationTime: 5,
           ingredients: [
-            { id: '1', name: 'Rhum blanc', stockLevel: 80, unit: 'cl', minStock: 20, price: 0.50 },
-            { id: '2', name: 'Menthe', stockLevel: 15, unit: 'unités', minStock: 10, price: 0.20 },
-            { id: '3', name: 'Citron vert', stockLevel: 8, unit: 'unités', minStock: 5, price: 0.30 }
+            { id: '1', name: 'Rhum blanc', stockLevel: 80, unit: 'cl', minStock: 20, price: 0.5 },
+            { id: '2', name: 'Menthe', stockLevel: 15, unit: 'unités', minStock: 10, price: 0.2 },
+            {
+              id: '3',
+              name: 'Citron vert',
+              stockLevel: 8,
+              unit: 'unités',
+              minStock: 5,
+              price: 0.3,
+            },
           ],
-          instructions: 'Bien remuer, servir avec beaucoup de glace'
+          instructions: 'Bien remuer, servir avec beaucoup de glace',
         },
         {
           id: '2',
@@ -96,16 +103,16 @@ export default function BarScreen() {
           quantity: 1,
           preparationTime: 3,
           ingredients: [
-            { id: '4', name: 'Café', stockLevel: 90, unit: 'unités', minStock: 20, price: 0.40 },
-            { id: '5', name: 'Lait', stockLevel: 60, unit: 'cl', minStock: 30, price: 0.20 }
-          ]
-        }
+            { id: '4', name: 'Café', stockLevel: 90, unit: 'unités', minStock: 20, price: 0.4 },
+            { id: '5', name: 'Lait', stockLevel: 60, unit: 'cl', minStock: 30, price: 0.2 },
+          ],
+        },
       ],
       status: 'pending',
       priority: 'normal',
       orderTime: '14:30',
       serverName: 'Marie',
-      notes: 'Client allergique à la noix de coco'
+      notes: 'Client allergique à la noix de coco',
     },
     {
       id: 'BAR-002',
@@ -118,14 +125,14 @@ export default function BarScreen() {
           quantity: 1,
           preparationTime: 2,
           ingredients: [
-            { id: '6', name: 'Vin rouge', stockLevel: 75, unit: 'cl', minStock: 50, price: 0.80 }
-          ]
-        }
+            { id: '6', name: 'Vin rouge', stockLevel: 75, unit: 'cl', minStock: 50, price: 0.8 },
+          ],
+        },
       ],
       status: 'preparing',
       priority: 'high',
       orderTime: '14:25',
-      serverName: 'Jean'
+      serverName: 'Jean',
     },
     {
       id: 'BAR-003',
@@ -138,70 +145,104 @@ export default function BarScreen() {
           quantity: 3,
           preparationTime: 2,
           ingredients: [
-            { id: '7', name: 'Bière blonde', stockLevel: 40, unit: 'cl', minStock: 100, price: 0.60 }
-          ]
-        }
+            {
+              id: '7',
+              name: 'Bière blonde',
+              stockLevel: 40,
+              unit: 'cl',
+              minStock: 100,
+              price: 0.6,
+            },
+          ],
+        },
       ],
       status: 'ready',
       priority: 'normal',
       orderTime: '14:20',
-      serverName: 'Sophie'
-    }
-  ]
+      serverName: 'Sophie',
+    },
+  ];
 
   // Stock alerts
   const stockAlerts: StockAlert[] = [
     { ingredientId: '2', ingredientName: 'Menthe', currentStock: 15, minStock: 10, unit: 'unités' },
-    { ingredientId: '3', ingredientName: 'Citron vert', currentStock: 8, minStock: 5, unit: 'unités' },
-    { ingredientId: '7', ingredientName: 'Bière blonde', currentStock: 40, minStock: 100, unit: 'cl' }
-  ]
+    {
+      ingredientId: '3',
+      ingredientName: 'Citron vert',
+      currentStock: 8,
+      minStock: 5,
+      unit: 'unités',
+    },
+    {
+      ingredientId: '7',
+      ingredientName: 'Bière blonde',
+      currentStock: 40,
+      minStock: 100,
+      unit: 'cl',
+    },
+  ];
 
   const updateOrderStatus = (orderId: string, status: DrinkOrder['status']) => {
     // In a real app, this would update the backend
-    console.log(`Order ${orderId} status updated to ${status}`)
-  }
+    console.log(`Order ${orderId} status updated to ${status}`);
+  };
 
   const getStatusColor = (status: DrinkOrder['status']) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'preparing': return 'bg-blue-100 text-blue-800'
-      case 'ready': return 'bg-green-100 text-green-800'
-      case 'served': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'preparing':
+        return 'bg-blue-100 text-blue-800';
+      case 'ready':
+        return 'bg-green-100 text-green-800';
+      case 'served':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getPriorityColor = (priority: DrinkOrder['priority']) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800'
-      case 'normal': return 'bg-blue-100 text-blue-800'
-      case 'low': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      case 'normal':
+        return 'bg-blue-100 text-blue-800';
+      case 'low':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'Cocktails': return <Cocktail className="h-4 w-4" />
-      case 'Vins': return <Wine className="h-4 w-4" />
-      case 'Bières': return <Beer className="h-4 w-4" />
-      case 'Chaud': return <Coffee className="h-4 w-4" />
-      case 'Desserts': return <IceCream className="h-4 w-4" />
-      default: return <Cocktail className="h-4 w-4" />
+      case 'Cocktails':
+        return <Martini className="h-4 w-4" />;
+      case 'Vins':
+        return <Wine className="h-4 w-4" />;
+      case 'Bières':
+        return <Beer className="h-4 w-4" />;
+      case 'Chaud':
+        return <Coffee className="h-4 w-4" />;
+      case 'Desserts':
+        return <IceCream className="h-4 w-4" />;
+      default:
+        return <Martini className="h-4 w-4" />;
     }
-  }
+  };
 
   const getStockColor = (current: number, min: number) => {
-    const percentage = (current / min) * 100
-    if (percentage <= 50) return 'text-red-600'
-    if (percentage <= 100) return 'text-yellow-600'
-    return 'text-green-600'
-  }
+    const percentage = (current / min) * 100;
+    if (percentage <= 50) return 'text-red-600';
+    if (percentage <= 100) return 'text-yellow-600';
+    return 'text-green-600';
+  };
 
   const getStockProgress = (current: number, min: number) => {
-    const percentage = Math.min((current / min) * 100, 100)
-    return percentage
-  }
+    const percentage = Math.min((current / min) * 100, 100);
+    return percentage;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -209,7 +250,7 @@ export default function BarScreen() {
       <div className="bg-white border-b px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Cocktail className="h-6 w-6 text-blue-600" />
+            <Martini className="h-6 w-6 text-blue-600" />
             <h1 className="text-xl font-bold">Bar</h1>
             <Badge variant="outline">Barman</Badge>
           </div>
@@ -237,8 +278,8 @@ export default function BarScreen() {
         <TabsContent value="orders" className="space-y-4">
           <div className="grid gap-4">
             {drinkOrders.map((order) => (
-              <Card 
-                key={order.id} 
+              <Card
+                key={order.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedOrder?.id === order.id ? 'ring-2 ring-blue-500' : ''
                 }`}
@@ -294,39 +335,37 @@ export default function BarScreen() {
                   )}
 
                   <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                    <div className="text-sm text-gray-500">
-                      Serveur: {order.serverName}
-                    </div>
+                    <div className="text-sm text-gray-500">Serveur: {order.serverName}</div>
                     <div className="flex gap-2">
                       {order.status === 'pending' && (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateOrderStatus(order.id, 'preparing')
+                            e.stopPropagation();
+                            updateOrderStatus(order.id, 'preparing');
                           }}
                         >
                           Commencer
                         </Button>
                       )}
                       {order.status === 'preparing' && (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateOrderStatus(order.id, 'ready')
+                            e.stopPropagation();
+                            updateOrderStatus(order.id, 'ready');
                           }}
                         >
                           Terminer
                         </Button>
                       )}
                       {order.status === 'ready' && (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           variant="outline"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateOrderStatus(order.id, 'served')
+                            e.stopPropagation();
+                            updateOrderStatus(order.id, 'served');
                           }}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" />
@@ -353,7 +392,10 @@ export default function BarScreen() {
             <CardContent>
               <div className="space-y-3">
                 {stockAlerts.map((alert) => (
-                  <div key={alert.ingredientId} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={alert.ingredientId}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div>
                       <div className="font-medium">{alert.ingredientName}</div>
                       <div className="text-sm text-gray-500">
@@ -361,7 +403,9 @@ export default function BarScreen() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className={`font-medium ${getStockColor(alert.currentStock, alert.minStock)}`}>
+                      <div
+                        className={`font-medium ${getStockColor(alert.currentStock, alert.minStock)}`}
+                      >
                         {alert.currentStock} {alert.unit}
                       </div>
                       <div className="text-sm text-gray-500">
@@ -383,20 +427,25 @@ export default function BarScreen() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {drinkOrders.flatMap(order => order.items).flatMap(item => item.ingredients).map((ingredient) => (
-                  <div key={ingredient.id} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{ingredient.name}</span>
-                      <span className={`text-sm ${getStockColor(ingredient.stockLevel, ingredient.minStock)}`}>
-                        {ingredient.stockLevel} {ingredient.unit}
-                      </span>
+                {drinkOrders
+                  .flatMap((order) => order.items)
+                  .flatMap((item) => item.ingredients)
+                  .map((ingredient) => (
+                    <div key={ingredient.id} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{ingredient.name}</span>
+                        <span
+                          className={`text-sm ${getStockColor(ingredient.stockLevel, ingredient.minStock)}`}
+                        >
+                          {ingredient.stockLevel} {ingredient.unit}
+                        </span>
+                      </div>
+                      <Progress
+                        value={getStockProgress(ingredient.stockLevel, ingredient.minStock)}
+                        className="h-2"
+                      />
                     </div>
-                    <Progress 
-                      value={getStockProgress(ingredient.stockLevel, ingredient.minStock)} 
-                      className="h-2"
-                    />
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -430,8 +479,8 @@ export default function BarScreen() {
                 <CardContent>
                   <div className="grid gap-3">
                     {drinkOrders
-                      .flatMap(order => order.items)
-                      .filter(item => item.category === category)
+                      .flatMap((order) => order.items)
+                      .filter((item) => item.category === category)
                       .map((item) => (
                         <div key={item.id} className="p-3 border rounded-lg">
                           <div className="flex items-center justify-between mb-2">
@@ -441,14 +490,19 @@ export default function BarScreen() {
                               <span>{item.preparationTime}min</span>
                             </div>
                           </div>
-                          
+
                           <div className="space-y-1">
                             <div className="text-sm font-medium text-gray-700">Ingrédients:</div>
                             <div className="grid gap-1">
                               {item.ingredients.map((ingredient) => (
-                                <div key={ingredient.id} className="flex items-center justify-between text-sm">
+                                <div
+                                  key={ingredient.id}
+                                  className="flex items-center justify-between text-sm"
+                                >
                                   <span>{ingredient.name}</span>
-                                  <span className="text-gray-500">{ingredient.price.toFixed(2)}€</span>
+                                  <span className="text-gray-500">
+                                    {ingredient.price.toFixed(2)}€
+                                  </span>
                                 </div>
                               ))}
                             </div>
@@ -470,5 +524,5 @@ export default function BarScreen() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

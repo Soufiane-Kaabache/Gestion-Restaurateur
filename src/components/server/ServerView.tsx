@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Users, 
-  Clock, 
-  CheckCircle, 
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Users,
+  Clock,
+  CheckCircle,
   AlertCircle,
   Plus,
   Utensils,
@@ -18,131 +18,141 @@ import {
   Search,
   Filter,
   Bell,
-  RefreshCw
-} from 'lucide-react'
-import { TableData } from '@/components/tables/TableCard'
-import { OrderData } from '@/components/orders/OrderForm'
-import { ProductData } from '@/components/menu/ProductCard'
+  RefreshCw,
+} from 'lucide-react';
+import { TableData } from '@/components/tables/TableCard';
+import { OrderData } from '@/components/orders/OrderForm';
+import { ProductData } from '@/components/menu/ProductCard';
 
 interface ServerViewProps {
-  tables: TableData[]
-  orders: OrderData[]
-  products: ProductData[]
-  onTableSelect?: (table: TableData) => void
-  onOrderCreate?: (table: TableData) => void
-  onOrderUpdate?: (order: OrderData) => void
-  onPaymentRequest?: (order: OrderData) => void
+  tables: TableData[];
+  orders: OrderData[];
+  products: ProductData[];
+  onTableSelect?: (table: TableData) => void;
+  onOrderCreate?: (table: TableData) => void;
+  onOrderUpdate?: (order: OrderData) => void;
+  onPaymentRequest?: (order: OrderData) => void;
 }
 
-export function ServerView({ 
-  tables, 
-  orders, 
+export function ServerView({
+  tables,
+  orders,
   products,
-  onTableSelect, 
+  onTableSelect,
   onOrderCreate,
   onOrderUpdate,
-  onPaymentRequest
+  onPaymentRequest,
 }: ServerViewProps) {
-  const [selectedSection, setSelectedSection] = useState<string>('all')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [notifications, setNotifications] = useState<string[]>([])
+  const [selectedSection, setSelectedSection] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [notifications, setNotifications] = useState<string[]>([]);
 
   // Get orders by table
   const getTableOrder = (tableId: string) => {
-    return orders.find(order => order.tableId === tableId && order.status !== 'SERVIE')
-  }
+    return orders.find((order) => order.tableId === tableId && order.status !== 'SERVIE');
+  };
 
   // Filter tables by section
-  const filteredTables = tables.filter(table => {
-    const matchesSection = selectedSection === 'all' || table.section === selectedSection
-    const matchesSearch = table.number.toString().includes(searchTerm)
-    return matchesSection && matchesSearch
-  })
+  const filteredTables = tables.filter((table) => {
+    const matchesSection = selectedSection === 'all' || table.section === selectedSection;
+    const matchesSearch = table.number.toString().includes(searchTerm);
+    return matchesSection && matchesSearch;
+  });
 
   // Get sections from tables
-  const sections = Array.from(new Set(tables.map(t => t.section).filter(Boolean)))
+  const sections = Array.from(new Set(tables.map((t) => t.section).filter(Boolean))) as string[];
 
   // Get active orders (not served)
-  const activeOrders = orders.filter(order => 
-    ['EN_ATTENTE', 'EN_PREPARATION', 'PRETE'].includes(order.status || '')
-  )
+  const activeOrders = orders.filter((order) =>
+    ['EN_ATTENTE', 'EN_PREPARATION', 'PRETE'].includes(order.status || ''),
+  );
 
   // Get orders ready to serve
-  const readyOrders = orders.filter(order => order.status === 'PRETE')
+  const readyOrders = orders.filter((order) => order.status === 'PRETE');
 
   // Get orders that need payment
-  const paymentOrders = orders.filter(order => 
-    order.status === 'SERVIE' && !order.payment
-  )
+  const paymentOrders = orders.filter((order) => order.status === 'SERVIE' && !order.payment);
 
   // Add notification for ready orders
   useEffect(() => {
     if (readyOrders.length > 0) {
-      setNotifications(prev => [
-        ...prev,
-        `${readyOrders.length} commande(s) prête(s) à servir`
-      ])
+      setNotifications((prev) => [...prev, `${readyOrders.length} commande(s) prête(s) à servir`]);
     }
-  }, [readyOrders.length])
+  }, [readyOrders.length]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'LIBRE': return 'bg-green-100 text-green-800 border-green-200'
-      case 'OCCUPEE': return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'RESERVEE': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'A_NETTOYER': return 'bg-orange-100 text-orange-800 border-orange-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      case 'LIBRE':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'OCCUPEE':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'RESERVEE':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'A_NETTOYER':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
-  const getOrderStatusColor = (status: string) => {
+  const getOrderStatusColor = (status?: string) => {
     switch (status) {
-      case 'EN_ATTENTE': return 'bg-yellow-100 text-yellow-800'
-      case 'EN_PREPARATION': return 'bg-blue-100 text-blue-800'
-      case 'PRETE': return 'bg-green-100 text-green-800'
-      case 'SERVIE': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'EN_ATTENTE':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'EN_PREPARATION':
+        return 'bg-blue-100 text-blue-800';
+      case 'PRETE':
+        return 'bg-green-100 text-green-800';
+      case 'SERVIE':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
-  const getOrderStatusText = (status: string) => {
+  const getOrderStatusText = (status?: string) => {
     switch (status) {
-      case 'EN_ATTENTE': return 'En attente'
-      case 'EN_PREPARATION': return 'En préparation'
-      case 'PRETE': return 'Prêt'
-      case 'SERVIE': return 'Servi'
-      default: return status
+      case 'EN_ATTENTE':
+        return 'En attente';
+      case 'EN_PREPARATION':
+        return 'En préparation';
+      case 'PRETE':
+        return 'Prêt';
+      case 'SERVIE':
+        return 'Servi';
+      default:
+        return status;
     }
-  }
+  };
 
   const formatTime = (dateString?: string) => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    return date.toLocaleTimeString('fr-FR', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    })
-  }
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   const getElapsedTime = (dateString?: string) => {
-    if (!dateString) return ''
-    const now = new Date()
-    const orderTime = new Date(dateString)
-    const diff = Math.floor((now.getTime() - orderTime.getTime()) / 60000)
-    return `${diff} min`
-  }
+    if (!dateString) return '';
+    const now = new Date();
+    const orderTime = new Date(dateString);
+    const diff = Math.floor((now.getTime() - orderTime.getTime()) / 60000);
+    return `${diff} min`;
+  };
 
   const handleMarkAsServed = (order: OrderData) => {
-    onOrderUpdate?.({ ...order, status: 'SERVIE' })
-  }
+    onOrderUpdate?.({ ...order, status: 'SERVIE' });
+  };
 
   const handleRequestPayment = (order: OrderData) => {
-    onPaymentRequest?.(order)
-  }
+    onPaymentRequest?.(order);
+  };
 
   const clearNotifications = () => {
-    setNotifications([])
-  }
+    setNotifications([]);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -154,18 +164,11 @@ export function ServerView({
               <Users className="h-8 w-8" />
               Service en Salle
             </h1>
-            <p className="text-gray-600">
-              Gestion des tables et commandes en temps réel
-            </p>
+            <p className="text-gray-600">Gestion des tables et commandes en temps réel</p>
           </div>
           <div className="flex items-center gap-2">
             {notifications.length > 0 && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={clearNotifications}
-                className="relative"
-              >
+              <Button variant="outline" size="sm" onClick={clearNotifications} className="relative">
                 <Bell className="h-4 w-4" />
                 {notifications.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
@@ -191,7 +194,7 @@ export function ServerView({
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-blue-600">
-                {tables.filter(t => t.status === 'OCCUPEE').length}
+                {tables.filter((t) => t.status === 'OCCUPEE').length}
               </div>
               <p className="text-sm text-gray-600">Occupées</p>
             </CardContent>
@@ -199,24 +202,20 @@ export function ServerView({
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-yellow-600">
-                {tables.filter(t => t.status === 'RESERVEE').length}
+                {tables.filter((t) => t.status === 'RESERVEE').length}
               </div>
               <p className="text-sm text-gray-600">Réservées</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-green-600">
-                {readyOrders.length}
-              </div>
+              <div className="text-2xl font-bold text-green-600">{readyOrders.length}</div>
               <p className="text-sm text-gray-600">Prêtes à servir</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-purple-600">
-                {paymentOrders.length}
-              </div>
+              <div className="text-2xl font-bold text-purple-600">{paymentOrders.length}</div>
               <p className="text-sm text-gray-600">À encaisser</p>
             </CardContent>
           </Card>
@@ -267,13 +266,13 @@ export function ServerView({
           {/* Tables Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {filteredTables.map((table) => {
-              const order = getTableOrder(table.id)
+              const order = getTableOrder(table.id);
               return (
-                <Card 
-                  key={table.id} 
-                  className={`cursor-pointer transition-all hover:shadow-lg ${
-                    getStatusColor(table.status)
-                  }`}
+                <Card
+                  key={table.id}
+                  className={`cursor-pointer transition-all hover:shadow-lg ${getStatusColor(
+                    table.status,
+                  )}`}
                   onClick={() => onTableSelect?.(table)}
                 >
                   <CardContent className="p-4">
@@ -285,7 +284,7 @@ export function ServerView({
                           {table.section}
                         </Badge>
                       )}
-                      
+
                       {order && (
                         <div className="mt-3 space-y-2">
                           <Badge className={`w-full ${getOrderStatusColor(order.status)}`}>
@@ -298,14 +297,14 @@ export function ServerView({
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="mt-3 flex gap-1">
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            onOrderCreate?.(table)
+                            e.stopPropagation();
+                            onOrderCreate?.(table);
                           }}
                           className="flex-1"
                         >
@@ -315,8 +314,8 @@ export function ServerView({
                           <Button
                             size="sm"
                             onClick={(e) => {
-                              e.stopPropagation()
-                              handleMarkAsServed(order)
+                              e.stopPropagation();
+                              handleMarkAsServed(order);
                             }}
                             className="flex-1"
                           >
@@ -327,7 +326,7 @@ export function ServerView({
                     </div>
                   </CardContent>
                 </Card>
-              )
+              );
             })}
           </div>
         </TabsContent>
@@ -354,30 +353,27 @@ export function ServerView({
                         <span>{getElapsedTime(order.createdAt)}</span>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2 mb-3">
                       {order.items.map((item) => (
                         <div key={item.id} className="flex justify-between text-sm">
-                          <span>{item.quantity}x {item.product.name}</span>
+                          <span>
+                            {item.quantity}x {item.product.name}
+                          </span>
                           <span>{(item.unitPrice * item.quantity).toFixed(2)} €</span>
                         </div>
                       ))}
                     </div>
-                    
+
                     {order.notes && (
-                      <div className="text-sm text-gray-600 italic mb-3">
-                        Notes: {order.notes}
-                      </div>
+                      <div className="text-sm text-gray-600 italic mb-3">Notes: {order.notes}</div>
                     )}
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="font-bold">Total: {order.totalAmount.toFixed(2)} €</span>
                       <div className="flex gap-2">
                         {order.status === 'PRETE' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleMarkAsServed(order)}
-                          >
+                          <Button size="sm" onClick={() => handleMarkAsServed(order)}>
                             <CheckCircle className="h-4 w-4 mr-2" />
                             Marquer servi
                           </Button>
@@ -386,7 +382,7 @@ export function ServerView({
                     </div>
                   </div>
                 ))}
-                
+
                 {activeOrders.length === 0 && (
                   <div className="text-center py-8">
                     <Utensils className="h-12 w-12 text-gray-300 mx-auto mb-4" />
@@ -409,30 +405,33 @@ export function ServerView({
             <CardContent>
               <div className="space-y-4">
                 {readyOrders.map((order) => (
-                  <div key={order.id} className="border border-green-200 bg-green-50 rounded-lg p-4">
+                  <div
+                    key={order.id}
+                    className="border border-green-200 bg-green-50 rounded-lg p-4"
+                  >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <span className="font-bold">{order.orderNumber}</span>
                         <Badge variant="outline">Table {order.table.number}</Badge>
-                        <Badge className="bg-green-100 text-green-800">
-                          Prêt
-                        </Badge>
+                        <Badge className="bg-green-100 text-green-800">Prêt</Badge>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Clock className="h-4 w-4" />
                         <span>{getElapsedTime(order.createdAt)}</span>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2 mb-3">
                       {order.items.map((item) => (
                         <div key={item.id} className="flex justify-between text-sm">
-                          <span>{item.quantity}x {item.product.name}</span>
+                          <span>
+                            {item.quantity}x {item.product.name}
+                          </span>
                           <span>{(item.unitPrice * item.quantity).toFixed(2)} €</span>
                         </div>
                       ))}
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="font-bold">Total: {order.totalAmount.toFixed(2)} €</span>
                       <Button
@@ -445,7 +444,7 @@ export function ServerView({
                     </div>
                   </div>
                 ))}
-                
+
                 {readyOrders.length === 0 && (
                   <div className="text-center py-8">
                     <CheckCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
@@ -473,25 +472,25 @@ export function ServerView({
                       <div className="flex items-center gap-3">
                         <span className="font-bold">{order.orderNumber}</span>
                         <Badge variant="outline">Table {order.table.number}</Badge>
-                        <Badge className="bg-purple-100 text-purple-800">
-                          Servi
-                        </Badge>
+                        <Badge className="bg-purple-100 text-purple-800">Servi</Badge>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Clock className="h-4 w-4" />
                         <span>{formatTime(order.servedAt)}</span>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2 mb-3">
                       {order.items.map((item) => (
                         <div key={item.id} className="flex justify-between text-sm">
-                          <span>{item.quantity}x {item.product.name}</span>
+                          <span>
+                            {item.quantity}x {item.product.name}
+                          </span>
                           <span>{(item.unitPrice * item.quantity).toFixed(2)} €</span>
                         </div>
                       ))}
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="font-bold">Total: {order.totalAmount.toFixed(2)} €</span>
                       <Button
@@ -504,7 +503,7 @@ export function ServerView({
                     </div>
                   </div>
                 ))}
-                
+
                 {paymentOrders.length === 0 && (
                   <div className="text-center py-8">
                     <DollarSign className="h-12 w-12 text-gray-300 mx-auto mb-4" />
@@ -521,7 +520,10 @@ export function ServerView({
       {notifications.length > 0 && (
         <div className="fixed bottom-4 right-4 space-y-2">
           {notifications.map((notification, index) => (
-            <div key={index} className="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg shadow-lg">
+            <div
+              key={index}
+              className="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg shadow-lg"
+            >
               <div className="flex items-center gap-2">
                 <Bell className="h-4 w-4" />
                 <span>{notification}</span>
@@ -531,5 +533,5 @@ export function ServerView({
         </div>
       )}
     </div>
-  )
+  );
 }

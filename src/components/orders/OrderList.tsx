@@ -1,13 +1,19 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { 
-  Search, 
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Search,
   Filter,
   Eye,
   Edit,
@@ -16,117 +22,142 @@ import {
   CheckCircle,
   XCircle,
   Utensils,
-  DollarSign
-} from 'lucide-react'
-import { OrderData } from './OrderForm'
+  DollarSign,
+} from 'lucide-react';
+import { OrderData } from './OrderForm';
 
 interface OrderListProps {
-  orders: OrderData[]
-  onOrderSelect?: (order: OrderData) => void
-  onOrderEdit?: (order: OrderData) => void
-  onOrderDelete?: (orderId: string) => void
-  onOrderStatusUpdate?: (orderId: string, status: string) => void
+  orders: OrderData[];
+  onOrderSelect?: (order: OrderData) => void;
+  onOrderEdit?: (order: OrderData) => void;
+  onOrderDelete?: (orderId: string) => void;
+  onOrderStatusUpdate?: (orderId: string, status: string) => void;
 }
 
-export function OrderList({ 
-  orders, 
-  onOrderSelect, 
-  onOrderEdit, 
+export function OrderList({
+  orders,
+  onOrderSelect,
+  onOrderEdit,
   onOrderDelete,
-  onOrderStatusUpdate 
+  onOrderStatusUpdate,
 }: OrderListProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState<string>('all')
-  const [selectedTable, setSelectedTable] = useState<string>('all')
-  const [sortBy, setSortBy] = useState<string>('createdAt')
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedTable, setSelectedTable] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('createdAt');
 
   // Get unique tables from orders
-  const tables = Array.from(new Set(orders.map(o => o.table.number)))
+  const tables = Array.from(new Set(orders.map((o) => o.table.number)));
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.table.number.toString().includes(searchTerm)
-    const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus
-    const matchesTable = selectedTable === 'all' || order.table.number.toString() === selectedTable
-    
-    return matchesSearch && matchesStatus && matchesTable
-  }).sort((a, b) => {
-    switch (sortBy) {
-      case 'createdAt':
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      case 'totalAmount':
-        return b.totalAmount - a.totalAmount
-      case 'table':
-        return a.table.number - b.table.number
+  const filteredOrders = orders
+    .filter((order) => {
+      const matchesSearch =
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.table.number.toString().includes(searchTerm);
+      const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
+      const matchesTable =
+        selectedTable === 'all' || order.table.number.toString() === selectedTable;
+
+      return matchesSearch && matchesStatus && matchesTable;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'createdAt':
+          return (
+            (b.createdAt ? new Date(b.createdAt).getTime() : 0) -
+            (a.createdAt ? new Date(a.createdAt).getTime() : 0)
+          );
+        case 'totalAmount':
+          return b.totalAmount - a.totalAmount;
+        case 'table':
+          return a.table.number - b.table.number;
+        default:
+          return 0;
+      }
+    });
+
+  const getStatusColor = (status?: string) => {
+    switch (status) {
+      case 'EN_ATTENTE':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'EN_PREPARATION':
+        return 'bg-blue-100 text-blue-800';
+      case 'PRETE':
+        return 'bg-green-100 text-green-800';
+      case 'SERVIE':
+        return 'bg-gray-100 text-gray-800';
+      case 'ANNULEE':
+        return 'bg-red-100 text-red-800';
       default:
-        return 0
+        return 'bg-gray-100 text-gray-800';
     }
-  })
+  };
 
-  const getStatusColor = (status: string) => {
+  const getStatusIcon = (status?: string) => {
     switch (status) {
-      case 'EN_ATTENTE': return 'bg-yellow-100 text-yellow-800'
-      case 'EN_PREPARATION': return 'bg-blue-100 text-blue-800'
-      case 'PRETE': return 'bg-green-100 text-green-800'
-      case 'SERVIE': return 'bg-gray-100 text-gray-800'
-      case 'ANNULEE': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'EN_ATTENTE':
+        return <Clock className="h-4 w-4" />;
+      case 'EN_PREPARATION':
+        return <Utensils className="h-4 w-4" />;
+      case 'PRETE':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'SERVIE':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'ANNULEE':
+        return <XCircle className="h-4 w-4" />;
+      default:
+        return null;
     }
-  }
+  };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusText = (status?: string) => {
     switch (status) {
-      case 'EN_ATTENTE': return <Clock className="h-4 w-4" />
-      case 'EN_PREPARATION': return <Utensils className="h-4 w-4" />
-      case 'PRETE': return <CheckCircle className="h-4 w-4" />
-      case 'SERVIE': return <CheckCircle className="h-4 w-4" />
-      case 'ANNULEE': return <XCircle className="h-4 w-4" />
-      default: return null
+      case 'EN_ATTENTE':
+        return 'En attente';
+      case 'EN_PREPARATION':
+        return 'En préparation';
+      case 'PRETE':
+        return 'Prête';
+      case 'SERVIE':
+        return 'Servie';
+      case 'ANNULEE':
+        return 'Annulée';
+      default:
+        return status;
     }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'EN_ATTENTE': return 'En attente'
-      case 'EN_PREPARATION': return 'En préparation'
-      case 'PRETE': return 'Prête'
-      case 'SERVIE': return 'Servie'
-      case 'ANNULEE': return 'Annulée'
-      default: return status
-    }
-  }
+  };
 
   const formatTime = (dateString?: string) => {
-    if (!dateString) return '-'
-    const date = new Date(dateString)
-    return date.toLocaleTimeString('fr-FR', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    })
-  }
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return '-'
-    const date = new Date(dateString)
-    return date.toLocaleDateString('fr-FR', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric' 
-    })
-  }
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
 
   const getStats = () => {
-    const total = orders.length
-    const enAttente = orders.filter(o => o.status === 'EN_ATTENTE').length
-    const enPreparation = orders.filter(o => o.status === 'EN_PREPARATION').length
-    const pretes = orders.filter(o => o.status === 'PRETE').length
-    const servies = orders.filter(o => o.status === 'SERVIE').length
-    const totalRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0)
-    
-    return { total, enAttente, enPreparation, pretes, servies, totalRevenue }
-  }
+    const total = orders.length;
+    const enAttente = orders.filter((o) => o.status === 'EN_ATTENTE').length;
+    const enPreparation = orders.filter((o) => o.status === 'EN_PREPARATION').length;
+    const pretes = orders.filter((o) => o.status === 'PRETE').length;
+    const servies = orders.filter((o) => o.status === 'SERVIE').length;
+    const totalRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);
 
-  const stats = getStats()
+    return { total, enAttente, enPreparation, pretes, servies, totalRevenue };
+  };
+
+  const stats = getStats();
 
   return (
     <div className="space-y-6">
@@ -186,7 +217,7 @@ export function OrderList({
                 className="pl-10"
               />
             </div>
-            
+
             <div className="flex gap-2">
               <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                 <SelectTrigger className="w-40">
@@ -201,7 +232,7 @@ export function OrderList({
                   <SelectItem value="ANNULEE">Annulée</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <Select value={selectedTable} onValueChange={setSelectedTable}>
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Table" />
@@ -215,7 +246,7 @@ export function OrderList({
                   ))}
                 </SelectContent>
               </Select>
-              
+
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Tri" />
@@ -286,18 +317,10 @@ export function OrderList({
                     </td>
                     <td className="p-4">
                       <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onOrderSelect?.(order)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => onOrderSelect?.(order)}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onOrderEdit?.(order)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => onOrderEdit?.(order)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
@@ -325,5 +348,5 @@ export function OrderList({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

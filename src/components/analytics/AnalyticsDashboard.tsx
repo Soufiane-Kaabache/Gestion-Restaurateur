@@ -1,16 +1,22 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Progress } from '@/components/ui/progress'
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Users,
   ShoppingCart,
   Calendar,
   BarChart3,
@@ -19,112 +25,112 @@ import {
   Target,
   Clock,
   Star,
-  Award
-} from 'lucide-react'
+  Award,
+} from 'lucide-react';
 
 interface AnalyticsData {
   revenue: {
-    today: number
-    week: number
-    month: number
-    year: number
-    lastWeek: number
-    lastMonth: number
-    lastYear: number
-  }
+    today: number;
+    week: number;
+    month: number;
+    year: number;
+    lastWeek: number;
+    lastMonth: number;
+    lastYear: number;
+  };
   orders: {
-    today: number
-    week: number
-    month: number
-    year: number
-    averageOrderValue: number
-  }
+    today: number;
+    week: number;
+    month: number;
+    year: number;
+    averageOrderValue: number;
+  };
   customers: {
-    total: number
-    new: number
-    returning: number
-    averageFrequency: number
-  }
+    total: number;
+    new: number;
+    returning: number;
+    averageFrequency: number;
+  };
   products: {
     topSelling: Array<{
-      name: string
-      quantity: number
-      revenue: number
-    }>
+      name: string;
+      quantity: number;
+      revenue: number;
+    }>;
     lowPerforming: Array<{
-      name: string
-      quantity: number
-      revenue: number
-    }>
-  }
+      name: string;
+      quantity: number;
+      revenue: number;
+    }>;
+  };
   tables: {
-    occupancy: number
-    turnover: number
+    occupancy: number;
+    turnover: number;
     peakHours: Array<{
-      hour: string
-      orders: number
-    }>
-  }
+      hour: string;
+      orders: number;
+    }>;
+  };
   staff: {
     performance: Array<{
-      name: string
-      orders: number
-      revenue: number
-      averageOrderValue: number
-    }>
-  }
+      name: string;
+      orders: number;
+      revenue: number;
+      averageOrderValue: number;
+    }>;
+  };
 }
 
 interface AnalyticsDashboardProps {
-  data?: AnalyticsData
-  period?: 'day' | 'week' | 'month' | 'year'
-  onPeriodChange?: (period: string) => void
+  data?: AnalyticsData;
+  period?: 'day' | 'week' | 'month' | 'year';
+  onPeriodChange?: (period: 'day' | 'week' | 'month' | 'year') => void;
 }
 
-export function AnalyticsDashboard({ 
-  data, 
-  period = 'week', 
-  onPeriodChange 
+export function AnalyticsDashboard({
+  data,
+  period = 'week',
+  onPeriodChange,
 }: AnalyticsDashboardProps) {
-  const [selectedPeriod, setSelectedPeriod] = useState(period)
+  const [selectedPeriod, setSelectedPeriod] = useState(period);
 
   // Mock data - dans une vraie application, cela viendrait de l'API
   const mockData: AnalyticsData = {
     revenue: {
-      today: 2847.50,
-      week: 15234.80,
-      month: 65432.10,
-      year: 785184.60,
-      lastWeek: 13567.90,
-      lastMonth: 58901.20,
-      lastYear: 723456.30
+      today: 2847.5,
+      week: 15234.8,
+      month: 65432.1,
+      year: 785184.6,
+      lastWeek: 13567.9,
+      lastMonth: 58901.2,
+      lastYear: 723456.3,
     },
     orders: {
       today: 67,
       week: 356,
       month: 1523,
       year: 18276,
-      averageOrderValue: 42.50
+      averageOrderValue: 42.5,
     },
     customers: {
       total: 2456,
       new: 156,
       returning: 2300,
-      averageFrequency: 3.2
+      averageFrequency: 3.2,
     },
     products: {
       topSelling: [
-        { name: 'Burger Classic', quantity: 234, revenue: 3018.60 },
-        { name: 'Pizza Margherita', quantity: 189, revenue: 2173.50 },
-        { name: 'Steak Frites', quantity: 156, revenue: 2948.40 },
-        { name: 'Salade César', quantity: 145, revenue: 1377.50 },
-        { name: 'Coca-Cola', quantity: 423, revenue: 1269.00 }
+        { name: 'Burger Classic', quantity: 234, revenue: 3018.6 },
+        { name: 'Pizza Margherita', quantity: 189, revenue: 2173.5 },
+        { name: 'Steak Frites', quantity: 156, revenue: 2948.4 },
+        { name: 'Salade César', quantity: 145, revenue: 1377.5 },
+        { name: 'Coca-Cola', quantity: 423, revenue: 1269.0 },
       ],
       lowPerforming: [
-        { name: 'Soupe du jour', quantity: 12, revenue: 78.00 },
-        { name: 'Thé glacé', quantity: 8, revenue: 24.00 },
-        { name: 'Eau minérale', quantity: 45, revenue: 67.50 }
-      ]
+        { name: 'Soupe du jour', quantity: 12, revenue: 78.0 },
+        { name: 'Thé glacé', quantity: 8, revenue: 24.0 },
+        { name: 'Eau minérale', quantity: 45, revenue: 67.5 },
+      ],
     },
     tables: {
       occupancy: 78.5,
@@ -134,44 +140,47 @@ export function AnalyticsDashboard({
         { hour: '13:00', orders: 67 },
         { hour: '19:00', orders: 34 },
         { hour: '20:00', orders: 56 },
-        { hour: '21:00', orders: 43 }
-      ]
+        { hour: '21:00', orders: 43 },
+      ],
     },
     staff: {
       performance: [
-        { name: 'Marie Dupont', orders: 89, revenue: 3456.70, averageOrderValue: 38.84 },
+        { name: 'Marie Dupont', orders: 89, revenue: 3456.7, averageOrderValue: 38.84 },
         { name: 'Pierre Martin', orders: 76, revenue: 2890.45, averageOrderValue: 38.03 },
-        { name: 'Sophie Bernard', orders: 82, revenue: 3234.80, averageOrderValue: 39.45 },
-        { name: 'Thomas Petit', orders: 68, revenue: 2543.20, averageOrderValue: 37.40 }
-      ]
-    }
-  }
+        { name: 'Sophie Bernard', orders: 82, revenue: 3234.8, averageOrderValue: 39.45 },
+        { name: 'Thomas Petit', orders: 68, revenue: 2543.2, averageOrderValue: 37.4 },
+      ],
+    },
+  };
 
-  const analyticsData = data || mockData
+  const analyticsData = data || mockData;
 
   const getRevenueGrowth = (current: number, previous: number) => {
-    const growth = ((current - previous) / previous) * 100
+    const growth = ((current - previous) / previous) * 100;
     return {
       value: Math.abs(growth).toFixed(1),
-      isPositive: growth >= 0
-    }
-  }
+      isPositive: growth >= 0,
+    };
+  };
 
-  const weekGrowth = getRevenueGrowth(analyticsData.revenue.week, analyticsData.revenue.lastWeek)
-  const monthGrowth = getRevenueGrowth(analyticsData.revenue.month, analyticsData.revenue.lastMonth)
-  const yearGrowth = getRevenueGrowth(analyticsData.revenue.year, analyticsData.revenue.lastYear)
+  const weekGrowth = getRevenueGrowth(analyticsData.revenue.week, analyticsData.revenue.lastWeek);
+  const monthGrowth = getRevenueGrowth(
+    analyticsData.revenue.month,
+    analyticsData.revenue.lastMonth,
+  );
+  const yearGrowth = getRevenueGrowth(analyticsData.revenue.year, analyticsData.revenue.lastYear);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
-      currency: 'EUR'
-    }).format(amount)
-  }
+      currency: 'EUR',
+    }).format(amount);
+  };
 
-  const handlePeriodChange = (value: string) => {
-    setSelectedPeriod(value as any)
-    onPeriodChange?.(value)
-  }
+  const handlePeriodChange = (value: 'day' | 'week' | 'month' | 'year') => {
+    setSelectedPeriod(value);
+    onPeriodChange?.(value);
+  };
 
   return (
     <div className="space-y-6">
@@ -179,9 +188,7 @@ export function AnalyticsDashboard({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold">Analytics & Rapports</h2>
-          <p className="text-gray-600">
-            Vue d'ensemble des performances de votre restaurant
-          </p>
+          <p className="text-gray-600">Vue d'ensemble des performances de votre restaurant</p>
         </div>
         <div className="flex items-center gap-2">
           <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
@@ -214,7 +221,8 @@ export function AnalyticsDashboard({
                 <TrendingDown className="h-3 w-3 mr-1 text-red-600" />
               )}
               <span className={weekGrowth.isPositive ? 'text-green-600' : 'text-red-600'}>
-                {weekGrowth.isPositive ? '+' : '-'}{weekGrowth.value}% vs semaine dernière
+                {weekGrowth.isPositive ? '+' : '-'}
+                {weekGrowth.value}% vs semaine dernière
               </span>
             </div>
           </CardContent>
@@ -345,7 +353,8 @@ export function AnalyticsDashboard({
                       <TrendingDown className="h-4 w-4 text-red-600" />
                     )}
                     <span className={weekGrowth.isPositive ? 'text-green-600' : 'text-red-600'}>
-                      {weekGrowth.isPositive ? '+' : '-'}{weekGrowth.value}%
+                      {weekGrowth.isPositive ? '+' : '-'}
+                      {weekGrowth.value}%
                     </span>
                   </div>
                 </div>
@@ -358,7 +367,8 @@ export function AnalyticsDashboard({
                       <TrendingDown className="h-4 w-4 text-red-600" />
                     )}
                     <span className={monthGrowth.isPositive ? 'text-green-600' : 'text-red-600'}>
-                      {monthGrowth.isPositive ? '+' : '-'}{monthGrowth.value}%
+                      {monthGrowth.isPositive ? '+' : '-'}
+                      {monthGrowth.value}%
                     </span>
                   </div>
                 </div>
@@ -371,7 +381,8 @@ export function AnalyticsDashboard({
                       <TrendingDown className="h-4 w-4 text-red-600" />
                     )}
                     <span className={yearGrowth.isPositive ? 'text-green-600' : 'text-red-600'}>
-                      {yearGrowth.isPositive ? '+' : '-'}{yearGrowth.value}%
+                      {yearGrowth.isPositive ? '+' : '-'}
+                      {yearGrowth.value}%
                     </span>
                   </div>
                 </div>
@@ -447,16 +458,22 @@ export function AnalyticsDashboard({
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-xl font-bold text-green-600">{analyticsData.customers.new}</div>
+                    <div className="text-xl font-bold text-green-600">
+                      {analyticsData.customers.new}
+                    </div>
                     <p className="text-xs text-gray-600">Nouveaux</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold text-blue-600">{analyticsData.customers.returning}</div>
+                    <div className="text-xl font-bold text-blue-600">
+                      {analyticsData.customers.returning}
+                    </div>
                     <p className="text-xs text-gray-600">Fidèles</p>
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-bold">{analyticsData.customers.averageFrequency}</div>
+                  <div className="text-xl font-bold">
+                    {analyticsData.customers.averageFrequency}
+                  </div>
                   <p className="text-sm text-gray-600">Visites moyennes/mois</p>
                 </div>
               </CardContent>
@@ -534,8 +551,8 @@ export function AnalyticsDashboard({
                       <span className="font-medium">{peak.hour}</span>
                       <div className="flex items-center gap-2">
                         <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full" 
+                          <div
+                            className="bg-blue-600 h-2 rounded-full"
                             style={{ width: `${(peak.orders / 67) * 100}%` }}
                           />
                         </div>
@@ -582,5 +599,5 @@ export function AnalyticsDashboard({
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

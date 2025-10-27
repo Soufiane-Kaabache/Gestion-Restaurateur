@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Switch } from '@/components/ui/switch'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export interface CategoryData {
-  id: string
-  name: string
-  description?: string
-  order: number
-  isActive: boolean
-  imageUrl?: string
+  id: string;
+  name: string;
+  description?: string;
+  order: number;
+  isActive: boolean;
+  imageUrl?: string;
 }
 
 interface CategoryFormProps {
-  category?: CategoryData | null
-  onSubmit: (category: any) => void
-  onCancel: () => void
+  category?: CategoryData | null;
+  onSubmit: (category: any) => void;
+  onCancel: () => void;
 }
 
 export function CategoryForm({ category, onSubmit, onCancel }: CategoryFormProps) {
@@ -30,7 +30,7 @@ export function CategoryForm({ category, onSubmit, onCancel }: CategoryFormProps
     order: '0',
     isActive: true,
     imageUrl: '',
-  })
+  });
 
   useEffect(() => {
     if (category) {
@@ -40,31 +40,31 @@ export function CategoryForm({ category, onSubmit, onCancel }: CategoryFormProps
         order: category.order.toString(),
         isActive: category.isActive,
         imageUrl: category.imageUrl || '',
-      })
+      });
     }
-  }, [category])
+  }, [category]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     const categoryData = {
       name: formData.name,
       description: formData.description || undefined,
       order: parseInt(formData.order),
       isActive: formData.isActive,
       imageUrl: formData.imageUrl || undefined,
-    }
+    };
 
     if (category) {
-      onSubmit({ ...categoryData, id: category.id })
+      onSubmit({ ...categoryData, id: category.id });
     } else {
-      onSubmit(categoryData)
+      onSubmit(categoryData);
     }
-  }
+  };
 
   const handleChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
@@ -74,7 +74,7 @@ export function CategoryForm({ category, onSubmit, onCancel }: CategoryFormProps
             {category ? 'Modifier la catégorie' : 'Créer une nouvelle catégorie'}
           </DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Nom *</Label>
@@ -134,12 +134,10 @@ export function CategoryForm({ category, onSubmit, onCancel }: CategoryFormProps
             <Button type="button" variant="outline" onClick={onCancel}>
               Annuler
             </Button>
-            <Button type="submit">
-              {category ? 'Modifier' : 'Créer'}
-            </Button>
+            <Button type="submit">{category ? 'Modifier' : 'Créer'}</Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

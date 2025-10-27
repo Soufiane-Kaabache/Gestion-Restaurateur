@@ -1,17 +1,23 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { TableData } from './TableCard'
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { TableData } from './TableCard';
 
 interface TableFormProps {
-  table?: TableData | null
-  onSubmit: (table: any) => void
-  onCancel: () => void
+  table?: TableData | null;
+  onSubmit: (table: any) => void;
+  onCancel: () => void;
 }
 
 export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
@@ -21,7 +27,7 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
     section: '',
     positionX: '0',
     positionY: '0',
-  })
+  });
 
   useEffect(() => {
     if (table) {
@@ -31,13 +37,13 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
         section: table.section || '',
         positionX: table.positionX.toString(),
         positionY: table.positionY.toString(),
-      })
+      });
     }
-  }, [table])
+  }, [table]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     const tableData = {
       number: parseInt(formData.number),
       capacity: parseInt(formData.capacity),
@@ -45,28 +51,26 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
       positionX: parseFloat(formData.positionX),
       positionY: parseFloat(formData.positionY),
       status: 'LIBRE' as const,
-    }
+    };
 
     if (table) {
-      onSubmit({ ...tableData, id: table.id })
+      onSubmit({ ...tableData, id: table.id });
     } else {
-      onSubmit(tableData)
+      onSubmit(tableData);
     }
-  }
+  };
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            {table ? 'Modifier la table' : 'Créer une nouvelle table'}
-          </DialogTitle>
+          <DialogTitle>{table ? 'Modifier la table' : 'Créer une nouvelle table'}</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -81,7 +85,7 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
                 min="1"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="capacity">Capacité</Label>
               <Input
@@ -99,7 +103,10 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="section">Section (optionnel)</Label>
-            <Select value={formData.section} onValueChange={(value) => handleChange('section', value)}>
+            <Select
+              value={formData.section}
+              onValueChange={(value) => handleChange('section', value)}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionner une section" />
               </SelectTrigger>
@@ -126,7 +133,7 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
                 step="0.1"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="positionY">Position Y</Label>
               <Input
@@ -144,12 +151,10 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
             <Button type="button" variant="outline" onClick={onCancel}>
               Annuler
             </Button>
-            <Button type="submit">
-              {table ? 'Modifier' : 'Créer'}
-            </Button>
+            <Button type="submit">{table ? 'Modifier' : 'Créer'}</Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

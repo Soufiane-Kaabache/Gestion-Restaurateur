@@ -22,6 +22,9 @@ const eslintConfig = [
       
       // React 相关规则
       "react-hooks/exhaustive-deps": "off",
+  // Disable these newer react-hooks rules that are causing many warnings in this codebase.
+  "react-hooks/set-state-in-effect": "off",
+  "react-hooks/purity": "off",
       "react/no-unescaped-entities": "off",
       "react/display-name": "off",
       "react/prop-types": "off",

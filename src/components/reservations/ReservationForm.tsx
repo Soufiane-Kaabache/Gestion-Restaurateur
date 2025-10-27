@@ -1,42 +1,43 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Calendar } from '@/components/ui/calendar'
-import { TableData } from '@/components/tables/TableCard'
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Calendar } from '@/components/ui/calendar';
+import { TableData } from '@/components/tables/TableCard';
 
 export interface ReservationData {
-  id?: string
-  customerName: string
-  customerPhone: string
-  customerEmail?: string
-  tableId: string
-  table: TableData
-  date: Date
-  time: string
-  guests: number
-  status: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE' | 'TERMINEE' | 'NO_SHOW'
-  notes?: string
+  id?: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail?: string;
+  tableId: string;
+  table: TableData;
+  date: Date;
+  time: string;
+  guests: number;
+  status: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE' | 'TERMINEE' | 'NO_SHOW';
+  notes?: string;
 }
 
 interface ReservationFormProps {
-  reservation?: ReservationData | null
-  tables: TableData[]
-  onSubmit: (reservation: ReservationData) => void
-  onCancel: () => void
+  reservation?: ReservationData | null;
+  tables: TableData[];
+  onSubmit: (reservation: ReservationData) => void;
+  onCancel: () => void;
 }
 
-export function ReservationForm({ 
-  reservation, 
-  tables, 
-  onSubmit, 
-  onCancel 
-}: ReservationFormProps) {
+export function ReservationForm({ reservation, tables, onSubmit, onCancel }: ReservationFormProps) {
   const [formData, setFormData] = useState({
     customerName: '',
     customerPhone: '',
@@ -46,15 +47,28 @@ export function ReservationForm({
     time: '',
     guests: '',
     notes: '',
-    status: 'EN_ATTENTE' as ReservationData['status']
-  })
+    status: 'EN_ATTENTE' as ReservationData['status'],
+  });
 
-  const availableTables = tables.filter(table => table.capacity >= parseInt(formData.guests || '1'))
+  const availableTables = tables.filter(
+    (table) => table.capacity >= parseInt(formData.guests || '1'),
+  );
 
   const timeSlots = [
-    '11:30', '12:00', '12:30', '13:00', '13:30', '14:00',
-    '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'
-  ]
+    '11:30',
+    '12:00',
+    '12:30',
+    '13:00',
+    '13:30',
+    '14:00',
+    '18:30',
+    '19:00',
+    '19:30',
+    '20:00',
+    '20:30',
+    '21:00',
+    '21:30',
+  ];
 
   useEffect(() => {
     if (reservation) {
@@ -67,37 +81,37 @@ export function ReservationForm({
         time: reservation.time,
         guests: reservation.guests.toString(),
         notes: reservation.notes || '',
-        status: reservation.status
-      })
+        status: reservation.status,
+      });
     }
-  }, [reservation])
+  }, [reservation]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     const reservationData: ReservationData = {
       customerName: formData.customerName,
       customerPhone: formData.customerPhone,
       customerEmail: formData.customerEmail || undefined,
       tableId: formData.tableId,
-      table: tables.find(t => t.id === formData.tableId)!,
+      table: tables.find((t) => t.id === formData.tableId)!,
       date: formData.date,
       time: formData.time,
       guests: parseInt(formData.guests),
       status: formData.status,
-      notes: formData.notes || undefined
-    }
+      notes: formData.notes || undefined,
+    };
 
     if (reservation) {
-      onSubmit({ ...reservationData, id: reservation.id })
+      onSubmit({ ...reservationData, id: reservation.id });
     } else {
-      onSubmit(reservationData)
+      onSubmit(reservationData);
     }
-  }
+  };
 
   const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
@@ -107,7 +121,7 @@ export function ReservationForm({
             {reservation ? 'Modifier la réservation' : 'Nouvelle réservation'}
           </DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -120,7 +134,7 @@ export function ReservationForm({
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="customerPhone">Téléphone *</Label>
               <Input
@@ -158,10 +172,13 @@ export function ReservationForm({
                 max="20"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="tableId">Table *</Label>
-              <Select value={formData.tableId} onValueChange={(value) => handleChange('tableId', value)}>
+              <Select
+                value={formData.tableId}
+                onValueChange={(value) => handleChange('tableId', value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner une table" />
                 </SelectTrigger>
@@ -187,7 +204,7 @@ export function ReservationForm({
                 className="rounded-md border"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="time">Heure *</Label>
               <Select value={formData.time} onValueChange={(value) => handleChange('time', value)}>
@@ -208,7 +225,10 @@ export function ReservationForm({
           {reservation && (
             <div className="space-y-2">
               <Label htmlFor="status">Statut</Label>
-              <Select value={formData.status} onValueChange={(value) => handleChange('status', value)}>
+              <Select
+                value={formData.status}
+                onValueChange={(value) => handleChange('status', value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -238,12 +258,10 @@ export function ReservationForm({
             <Button type="button" variant="outline" onClick={onCancel}>
               Annuler
             </Button>
-            <Button type="submit">
-              {reservation ? 'Modifier' : 'Créer'}
-            </Button>
+            <Button type="submit">{reservation ? 'Modifier' : 'Créer'}</Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

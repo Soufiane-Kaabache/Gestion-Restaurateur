@@ -1,46 +1,36 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Plus, 
-  Search, 
-  Filter,
-  Grid3X3,
-  List,
-  Star,
-  TrendingUp,
-  Eye,
-  Edit
-} from 'lucide-react'
-import { ProductCard, ProductData } from './ProductCard'
-import { ProductForm } from './ProductForm'
-import { CategoryForm, CategoryData } from './CategoryForm'
+import { useState, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Plus, Search, Filter, Grid3X3, List, Star, TrendingUp, Eye, Edit } from 'lucide-react';
+import { ProductCard, ProductData } from './ProductCard';
+import { ProductForm } from './ProductForm';
+import { CategoryForm, CategoryData } from './CategoryForm';
 
 interface MenuManagerProps {
-  products: ProductData[]
-  categories: CategoryData[]
-  onProductUpdate?: (product: ProductData) => void
-  onProductCreate?: (product: Omit<ProductData, 'id'>) => void
-  onProductDelete?: (productId: string) => void
-  onCategoryUpdate?: (category: CategoryData) => void
-  onCategoryCreate?: (category: Omit<CategoryData, 'id'>) => void
-  onCategoryDelete?: (categoryId: string) => void
-  onProductSelect?: (product: ProductData) => void
-  selectable?: boolean
-  selectedProducts?: string[]
-  onSelectionChange?: (selectedProducts: string[]) => void
+  products: ProductData[];
+  categories: CategoryData[];
+  onProductUpdate?: (product: ProductData) => void;
+  onProductCreate?: (product: Omit<ProductData, 'id'>) => void;
+  onProductDelete?: (productId: string) => void;
+  onCategoryUpdate?: (category: CategoryData) => void;
+  onCategoryCreate?: (category: Omit<CategoryData, 'id'>) => void;
+  onCategoryDelete?: (categoryId: string) => void;
+  onProductSelect?: (product: ProductData) => void;
+  selectable?: boolean;
+  selectedProducts?: string[];
+  onSelectionChange?: (selectedProducts: string[]) => void;
 }
 
-export function MenuManager({ 
-  products, 
+export function MenuManager({
+  products,
   categories,
-  onProductUpdate, 
-  onProductCreate, 
+  onProductUpdate,
+  onProductCreate,
   onProductDelete,
   onCategoryUpdate,
   onCategoryCreate,
@@ -48,111 +38,136 @@ export function MenuManager({
   onProductSelect,
   selectable = false,
   selectedProducts = [],
-  onSelectionChange
+  onSelectionChange,
 }: MenuManagerProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedAvailability, setSelectedAvailability] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [sortBy, setSortBy] = useState<string>('name')
-  const [showProductForm, setShowProductForm] = useState(false)
-  const [showCategoryForm, setShowCategoryForm] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<ProductData | null>(null)
-  const [editingCategory, setEditingCategory] = useState<CategoryData | null>(null)
-  const [quantities, setQuantities] = useState<Record<string, number>>({})
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedAvailability, setSelectedAvailability] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState<string>('name');
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<ProductData | null>(null);
+  const [editingCategory, setEditingCategory] = useState<CategoryData | null>(null);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || product.categoryId === selectedCategory
-    const matchesAvailability = selectedAvailability === 'all' || 
-                               (selectedAvailability === 'available' && product.isAvailable) ||
-                               (selectedAvailability === 'unavailable' && !product.isAvailable)
-    
-    return matchesSearch && matchesCategory && matchesAvailability
-  }).sort((a, b) => {
-    switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name)
-      case 'price':
-        return a.price - b.price
-      case 'popularity':
-        return (b.orderCount || 0) - (a.orderCount || 0)
-      case 'rating':
-        return (b.rating || 0) - (a.rating || 0)
-      default:
-        return 0
-    }
-  })
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'all' || product.categoryId === selectedCategory;
+      const matchesAvailability =
+        selectedAvailability === 'all' ||
+        (selectedAvailability === 'available' && product.isAvailable) ||
+        (selectedAvailability === 'unavailable' && !product.isAvailable);
+
+      return matchesSearch && matchesCategory && matchesAvailability;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'price':
+          return a.price - b.price;
+        case 'popularity':
+          return (b.orderCount || 0) - (a.orderCount || 0);
+        case 'rating':
+          return (b.rating || 0) - (a.rating || 0);
+        default:
+          return 0;
+      }
+    });
 
   const handleProductEdit = useCallback((product: ProductData) => {
-    setEditingProduct(product)
-    setShowProductForm(true)
-  }, [])
+    setEditingProduct(product);
+    setShowProductForm(true);
+  }, []);
 
-  const handleProductDelete = useCallback((productId: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-      onProductDelete?.(productId)
-    }
-  }, [onProductDelete])
+  const handleProductDelete = useCallback(
+    (productId: string) => {
+      if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+        onProductDelete?.(productId);
+      }
+    },
+    [onProductDelete],
+  );
 
-  const handleProductCreate = useCallback((productData: Omit<ProductData, 'id'>) => {
-    onProductCreate?.(productData)
-    setShowProductForm(false)
-    setEditingProduct(null)
-  }, [onProductCreate])
+  const handleProductCreate = useCallback(
+    (productData: Omit<ProductData, 'id'>) => {
+      onProductCreate?.(productData);
+      setShowProductForm(false);
+      setEditingProduct(null);
+    },
+    [onProductCreate],
+  );
 
-  const handleProductUpdate = useCallback((productData: ProductData) => {
-    onProductUpdate?.(productData)
-    setShowProductForm(false)
-    setEditingProduct(null)
-  }, [onProductUpdate])
+  const handleProductUpdate = useCallback(
+    (productData: ProductData) => {
+      onProductUpdate?.(productData);
+      setShowProductForm(false);
+      setEditingProduct(null);
+    },
+    [onProductUpdate],
+  );
 
   const handleCategoryEdit = useCallback((category: CategoryData) => {
-    setEditingCategory(category)
-    setShowCategoryForm(true)
-  }, [])
+    setEditingCategory(category);
+    setShowCategoryForm(true);
+  }, []);
 
-  const handleCategoryDelete = useCallback((categoryId: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
-      onCategoryDelete?.(categoryId)
-    }
-  }, [onCategoryDelete])
-
-  const handleCategoryCreate = useCallback((categoryData: Omit<CategoryData, 'id'>) => {
-    onCategoryCreate?.(categoryData)
-    setShowCategoryForm(false)
-    setEditingCategory(null)
-  }, [onCategoryCreate])
-
-  const handleCategoryUpdate = useCallback((categoryData: CategoryData) => {
-    onCategoryUpdate?.(categoryData)
-    setShowCategoryForm(false)
-    setEditingCategory(null)
-  }, [onCategoryUpdate])
-
-  const handleQuantityChange = useCallback((productId: string, quantity: number) => {
-    setQuantities(prev => ({ ...prev, [productId]: quantity }))
-    
-    if (selectable && onSelectionChange) {
-      if (quantity > 0 && !selectedProducts.includes(productId)) {
-        onSelectionChange([...selectedProducts, productId])
-      } else if (quantity === 0 && selectedProducts.includes(productId)) {
-        onSelectionChange(selectedProducts.filter(id => id !== productId))
+  const handleCategoryDelete = useCallback(
+    (categoryId: string) => {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
+        onCategoryDelete?.(categoryId);
       }
-    }
-  }, [selectable, selectedProducts, onSelectionChange])
+    },
+    [onCategoryDelete],
+  );
+
+  const handleCategoryCreate = useCallback(
+    (categoryData: Omit<CategoryData, 'id'>) => {
+      onCategoryCreate?.(categoryData);
+      setShowCategoryForm(false);
+      setEditingCategory(null);
+    },
+    [onCategoryCreate],
+  );
+
+  const handleCategoryUpdate = useCallback(
+    (categoryData: CategoryData) => {
+      onCategoryUpdate?.(categoryData);
+      setShowCategoryForm(false);
+      setEditingCategory(null);
+    },
+    [onCategoryUpdate],
+  );
+
+  const handleQuantityChange = useCallback(
+    (productId: string, quantity: number) => {
+      setQuantities((prev) => ({ ...prev, [productId]: quantity }));
+
+      if (selectable && onSelectionChange) {
+        if (quantity > 0 && !selectedProducts.includes(productId)) {
+          onSelectionChange([...selectedProducts, productId]);
+        } else if (quantity === 0 && selectedProducts.includes(productId)) {
+          onSelectionChange(selectedProducts.filter((id) => id !== productId));
+        }
+      }
+    },
+    [selectable, selectedProducts, onSelectionChange],
+  );
 
   const getStats = () => {
-    const total = products.length
-    const available = products.filter(p => p.isAvailable).length
-    const unavailable = products.filter(p => !p.isAvailable).length
-    const categories = categories.length
-    
-    return { total, available, unavailable, categories }
-  }
+    const total = products.length;
+    const available = products.filter((p) => p.isAvailable).length;
+    const unavailable = products.filter((p) => !p.isAvailable).length;
+    const categoriesCount = categories.length;
 
-  const stats = getStats()
+    return { total, available, unavailable, categories: categoriesCount };
+  };
+
+  const stats = getStats();
 
   return (
     <div className="space-y-6">
@@ -242,7 +257,7 @@ export function MenuManager({
                 className="pl-10"
               />
             </div>
-            
+
             <div className="flex gap-2">
               <select
                 value={selectedCategory}
@@ -256,7 +271,7 @@ export function MenuManager({
                   </option>
                 ))}
               </select>
-              
+
               <select
                 value={selectedAvailability}
                 onChange={(e) => setSelectedAvailability(e.target.value)}
@@ -266,7 +281,7 @@ export function MenuManager({
                 <option value="available">Disponibles</option>
                 <option value="unavailable">Indisponibles</option>
               </select>
-              
+
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -277,7 +292,7 @@ export function MenuManager({
                 <option value="popularity">Popularité</option>
                 <option value="rating">Note</option>
               </select>
-              
+
               <div className="flex gap-1">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'outline'}
@@ -358,9 +373,7 @@ export function MenuManager({
                               {product.isAvailable ? 'Disponible' : 'Indisponible'}
                             </Badge>
                           </td>
-                          <td className="p-4">
-                            {product.orderCount || 0} commandes
-                          </td>
+                          <td className="p-4">{product.orderCount || 0} commandes</td>
                           <td className="p-4">
                             <div className="flex gap-2">
                               <Button
@@ -432,7 +445,7 @@ export function MenuManager({
                       {category.isActive ? 'Active' : 'Inactive'}
                     </Badge>
                     <span className="text-sm text-gray-600">
-                      {products.filter(p => p.categoryId === category.id).length} produits
+                      {products.filter((p) => p.categoryId === category.id).length} produits
                     </span>
                   </div>
                 </CardContent>
@@ -461,8 +474,8 @@ export function MenuManager({
           categories={categories}
           onSubmit={editingProduct ? handleProductUpdate : handleProductCreate}
           onCancel={() => {
-            setShowProductForm(false)
-            setEditingProduct(null)
+            setShowProductForm(false);
+            setEditingProduct(null);
           }}
         />
       )}
@@ -472,11 +485,11 @@ export function MenuManager({
           category={editingCategory}
           onSubmit={editingCategory ? handleCategoryUpdate : handleCategoryCreate}
           onCancel={() => {
-            setShowCategoryForm(false)
-            setEditingCategory(null)
+            setShowCategoryForm(false);
+            setEditingCategory(null);
           }}
         />
       )}
     </div>
-  )
+  );
 }

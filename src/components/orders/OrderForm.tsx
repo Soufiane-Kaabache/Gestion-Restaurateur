@@ -1,164 +1,151 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { 
-  Plus, 
-  Minus, 
-  Trash2, 
-  Search,
-  Clock,
-  Users,
-  DollarSign
-} from 'lucide-react'
-import { ProductData } from '@/components/menu/ProductCard'
-import { TableData } from '@/components/tables/TableCard'
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Plus, Minus, Trash2, Search, Clock, Users, DollarSign } from 'lucide-react';
+import { ProductData } from '@/components/menu/ProductCard';
+import { TableData } from '@/components/tables/TableCard';
 
 export interface OrderItem {
-  id: string
-  productId: string
-  product: ProductData
-  quantity: number
-  unitPrice: number
-  notes?: string
+  id: string;
+  productId: string;
+  product: ProductData;
+  quantity: number;
+  unitPrice: number;
+  notes?: string;
 }
 
 export interface OrderData {
-  id?: string
-  tableId: string
-  table: TableData
-  items: OrderItem[]
-  notes?: string
-  totalAmount: number
-  taxAmount: number
-  discount: number
-  tip: number
-  status?: 'EN_ATTENTE' | 'EN_PREPARATION' | 'PRETE' | 'SERVIE' | 'ANNULEE'
-  createdAt?: string
-  orderNumber?: string
+  id: string;
+  tableId: string;
+  table: TableData;
+  items: OrderItem[];
+  notes?: string;
+  totalAmount: number;
+  taxAmount: number;
+  discount: number;
+  tip: number;
+  status?: 'EN_ATTENTE' | 'EN_PREPARATION' | 'PRETE' | 'SERVIE' | 'ANNULEE';
+  // Payment can have various fields depending on the provider; keep flexible
+  payment?: Record<string, any>;
+  servedAt?: string;
+  createdAt?: string;
+  orderNumber?: string;
 }
 
 interface OrderFormProps {
-  table: TableData
-  products: ProductData[]
-  initialOrder?: OrderData
-  onSubmit: (order: OrderData) => void
-  onCancel: () => void
+  table: TableData;
+  products: ProductData[];
+  initialOrder?: OrderData | null;
+  onSubmit: (order: OrderData) => void;
+  onCancel: () => void;
 }
 
-export function OrderForm({ 
-  table, 
-  products, 
-  initialOrder, 
-  onSubmit, 
-  onCancel 
-}: OrderFormProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
-  const [orderNotes, setOrderNotes] = useState('')
-  const [discount, setDiscount] = useState(0)
-  const [tip, setTip] = useState(0)
+export function OrderForm({ table, products, initialOrder, onSubmit, onCancel }: OrderFormProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  const [orderNotes, setOrderNotes] = useState('');
+  const [discount, setDiscount] = useState(0);
+  const [tip, setTip] = useState(0);
 
   // Get unique categories from products
-  const categories = Array.from(new Set(products.map(p => p.categoryId)))
-    .map(categoryId => {
-      const category = products.find(p => p.categoryId === categoryId)
-      return {
-        id: categoryId,
-        name: category?.categoryName || 'Non catégorisé'
-      }
-    })
+  const categories = Array.from(new Set(products.map((p) => p.categoryId))).map((categoryId) => {
+    const category = products.find((p) => p.categoryId === categoryId);
+    return {
+      id: categoryId,
+      name: category?.categoryName || 'Non catégorisé',
+    };
+  });
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || product.categoryId === selectedCategory
-    const matchesAvailability = product.isAvailable
-    
-    return matchesSearch && matchesCategory && matchesAvailability
-  })
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || product.categoryId === selectedCategory;
+    const matchesAvailability = product.isAvailable;
+
+    return matchesSearch && matchesCategory && matchesAvailability;
+  });
 
   // Initialize with initial order data
   useEffect(() => {
     if (initialOrder) {
-      setOrderItems(initialOrder.items)
-      setOrderNotes(initialOrder.notes || '')
-      setDiscount(initialOrder.discount)
-      setTip(initialOrder.tip)
+      setOrderItems(initialOrder.items);
+      setOrderNotes(initialOrder.notes || '');
+      setDiscount(initialOrder.discount);
+      setTip(initialOrder.tip);
     }
-  }, [initialOrder])
+  }, [initialOrder]);
 
   const addToOrder = (product: ProductData) => {
-    const existingItem = orderItems.find(item => item.productId === product.id)
-    
+    const existingItem = orderItems.find((item) => item.productId === product.id);
+
     if (existingItem) {
-      setOrderItems(prev => prev.map(item => 
-        item.productId === product.id 
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      ))
+      setOrderItems((prev) =>
+        prev.map((item) =>
+          item.productId === product.id ? { ...item, quantity: item.quantity + 1 } : item,
+        ),
+      );
     } else {
       const newItem: OrderItem = {
         id: Date.now().toString(),
         productId: product.id,
         product,
         quantity: 1,
-        unitPrice: product.price
-      }
-      setOrderItems(prev => [...prev, newItem])
+        unitPrice: product.price,
+      };
+      setOrderItems((prev) => [...prev, newItem]);
     }
-  }
+  };
 
   const updateQuantity = (itemId: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromOrder(itemId)
+      removeFromOrder(itemId);
     } else {
-      setOrderItems(prev => prev.map(item => 
-        item.id === itemId ? { ...item, quantity } : item
-      ))
+      setOrderItems((prev) =>
+        prev.map((item) => (item.id === itemId ? { ...item, quantity } : item)),
+      );
     }
-  }
+  };
 
   const removeFromOrder = (itemId: string) => {
-    setOrderItems(prev => prev.filter(item => item.id !== itemId))
-  }
+    setOrderItems((prev) => prev.filter((item) => item.id !== itemId));
+  };
 
   const updateItemNotes = (itemId: string, notes: string) => {
-    setOrderItems(prev => prev.map(item => 
-      item.id === itemId ? { ...item, notes } : item
-    ))
-  }
+    setOrderItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, notes } : item)));
+  };
 
   const calculateSubtotal = () => {
-    return orderItems.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0)
-  }
+    return orderItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  };
 
   const calculateTax = () => {
-    const subtotal = calculateSubtotal()
-    return subtotal * 0.1 // 10% TVA
-  }
+    const subtotal = calculateSubtotal();
+    return subtotal * 0.1; // 10% TVA
+  };
 
   const calculateTotal = () => {
-    const subtotal = calculateSubtotal()
-    const tax = calculateTax()
-    return subtotal + tax - discount + tip
-  }
+    const subtotal = calculateSubtotal();
+    const tax = calculateTax();
+    return subtotal + tax - discount + tip;
+  };
 
   const handleSubmit = () => {
     if (orderItems.length === 0) {
-      alert('Veuillez ajouter au moins un produit à la commande')
-      return
+      alert('Veuillez ajouter au moins un produit à la commande');
+      return;
     }
 
     const orderData: OrderData = {
-      id: initialOrder?.id,
+      id: initialOrder?.id ?? Date.now().toString(),
       tableId: table.id,
       table,
       items: orderItems,
@@ -166,11 +153,11 @@ export function OrderForm({
       totalAmount: calculateTotal(),
       taxAmount: calculateTax(),
       discount,
-      tip
-    }
+      tip,
+    };
 
-    onSubmit(orderData)
-  }
+    onSubmit(orderData);
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -212,8 +199,8 @@ export function OrderForm({
             {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-96 overflow-y-auto">
               {filteredProducts.map((product) => (
-                <Card 
-                  key={product.id} 
+                <Card
+                  key={product.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => addToOrder(product)}
                 >
@@ -277,9 +264,7 @@ export function OrderForm({
                       >
                         <Minus className="h-3 w-3" />
                       </Button>
-                      <span className="text-sm font-medium w-8 text-center">
-                        {item.quantity}
-                      </span>
+                      <span className="text-sm font-medium w-8 text-center">{item.quantity}</span>
                       <Button
                         size="sm"
                         variant="outline"
@@ -297,9 +282,7 @@ export function OrderForm({
                       </Button>
                     </div>
                     {item.notes && (
-                      <p className="text-xs text-gray-600 mt-1 italic">
-                        Note: {item.notes}
-                      </p>
+                      <p className="text-xs text-gray-600 mt-1 italic">Note: {item.notes}</p>
                     )}
                   </div>
                 </div>
@@ -307,9 +290,7 @@ export function OrderForm({
             </div>
 
             {orderItems.length === 0 && (
-              <p className="text-center text-gray-500 py-4">
-                Aucun produit ajouté
-              </p>
+              <p className="text-center text-gray-500 py-4">Aucun produit ajouté</p>
             )}
 
             <Separator />
@@ -337,7 +318,9 @@ export function OrderForm({
                 <span>{calculateTax().toFixed(2)} €</span>
               </div>
               <div className="flex items-center gap-2">
-                <Label htmlFor="discount" className="text-sm">Remise:</Label>
+                <Label htmlFor="discount" className="text-sm">
+                  Remise:
+                </Label>
                 <Input
                   id="discount"
                   type="number"
@@ -350,7 +333,9 @@ export function OrderForm({
                 <span className="text-sm">€</span>
               </div>
               <div className="flex items-center gap-2">
-                <Label htmlFor="tip" className="text-sm">Pourboire:</Label>
+                <Label htmlFor="tip" className="text-sm">
+                  Pourboire:
+                </Label>
                 <Input
                   id="tip"
                   type="number"
@@ -374,11 +359,7 @@ export function OrderForm({
               <Button variant="outline" onClick={onCancel} className="flex-1">
                 Annuler
               </Button>
-              <Button 
-                onClick={handleSubmit} 
-                className="flex-1"
-                disabled={orderItems.length === 0}
-              >
+              <Button onClick={handleSubmit} className="flex-1" disabled={orderItems.length === 0}>
                 {initialOrder ? 'Modifier' : 'Créer'} la commande
               </Button>
             </div>
@@ -386,5 +367,5 @@ export function OrderForm({
         </Card>
       </div>
     </div>
-  )
+  );
 }

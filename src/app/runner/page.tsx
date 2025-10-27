@@ -1,74 +1,76 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { 
-  Truck, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle, 
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import {
+  Truck,
+  Clock,
+  CheckCircle,
+  AlertCircle,
   Users,
   ChefHat,
-  Cocktail,
+  Martini,
   Utensils,
   Wrench,
   MapPin,
   Timer,
   Bell,
-  RefreshCw
-} from 'lucide-react'
+  RefreshCw,
+} from 'lucide-react';
 
 interface ReadyOrder {
-  id: string
-  tableNumber: number
-  items: ReadyItem[]
-  preparationTime: number
-  readyTime: string
-  priority: 'low' | 'normal' | 'high'
-  temperature: 'hot' | 'cold' | 'ambient'
-  serverName: string
-  notes?: string
+  id: string;
+  tableNumber: number;
+  items: ReadyItem[];
+  preparationTime: number;
+  readyTime: string;
+  priority: 'low' | 'normal' | 'high';
+  temperature: 'hot' | 'cold' | 'ambient';
+  serverName: string;
+  notes?: string;
 }
 
 interface ReadyItem {
-  id: string
-  name: string
-  category: string
-  quantity: number
-  specialInstructions?: string
+  id: string;
+  name: string;
+  category: string;
+  quantity: number;
+  specialInstructions?: string;
 }
 
 interface CleaningTask {
-  id: string
-  tableNumber: number
-  type: 'table' | 'floor' | 'dishes' | 'equipment'
-  priority: 'low' | 'normal' | 'high'
-  requestedTime: string
-  requestedBy: string
-  status: 'pending' | 'in_progress' | 'completed'
-  notes?: string
+  id: string;
+  tableNumber: number;
+  type: 'table' | 'floor' | 'dishes' | 'equipment';
+  priority: 'low' | 'normal' | 'high';
+  requestedTime: string;
+  requestedBy: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  notes?: string;
 }
 
 interface DeliveryTask {
-  id: string
-  orderId: string
-  tableNumber: number
-  items: string[]
-  pickupLocation: 'kitchen' | 'bar'
-  status: 'pending' | 'picked_up' | 'delivered'
-  assignedRunner?: string
-  estimatedTime: number
+  id: string;
+  orderId: string;
+  tableNumber: number;
+  items: string[];
+  pickupLocation: 'kitchen' | 'bar';
+  status: 'pending' | 'picked_up' | 'delivered';
+  assignedRunner?: string;
+  estimatedTime: number;
 }
 
 export default function RunnerScreen() {
-  const [activeTab, setActiveTab] = useState('pickup')
-  const [selectedTask, setSelectedTask] = useState<ReadyOrder | CleaningTask | DeliveryTask | null>(null)
-  const [notifications, setNotifications] = useState(4)
+  const [activeTab, setActiveTab] = useState('pickup');
+  const [selectedTask, setSelectedTask] = useState<ReadyOrder | CleaningTask | DeliveryTask | null>(
+    null,
+  );
+  const [notifications, setNotifications] = useState(4);
 
   // Mock data for ready orders
   const readyOrders: ReadyOrder[] = [
@@ -81,21 +83,21 @@ export default function RunnerScreen() {
           name: 'Burger Classic',
           category: 'Plats',
           quantity: 2,
-          specialInstructions: 'Sans oignon'
+          specialInstructions: 'Sans oignon',
         },
         {
           id: '2',
           name: 'Frites',
           category: 'Accompagnements',
-          quantity: 2
-        }
+          quantity: 2,
+        },
       ],
       preparationTime: 15,
       readyTime: '14:35',
       priority: 'high',
       temperature: 'hot',
       serverName: 'Marie',
-      notes: 'Client pressé'
+      notes: 'Client pressé',
     },
     {
       id: 'READY-002',
@@ -105,20 +107,20 @@ export default function RunnerScreen() {
           id: '3',
           name: 'Mojito',
           category: 'Cocktails',
-          quantity: 1
+          quantity: 1,
         },
         {
           id: '4',
           name: 'Verre de vin blanc',
           category: 'Vins',
-          quantity: 2
-        }
+          quantity: 2,
+        },
       ],
       preparationTime: 5,
       readyTime: '14:38',
       priority: 'normal',
       temperature: 'cold',
-      serverName: 'Jean'
+      serverName: 'Jean',
     },
     {
       id: 'READY-003',
@@ -128,16 +130,16 @@ export default function RunnerScreen() {
           id: '5',
           name: 'Salade César',
           category: 'Entrées',
-          quantity: 1
-        }
+          quantity: 1,
+        },
       ],
       preparationTime: 10,
       readyTime: '14:40',
       priority: 'normal',
       temperature: 'ambient',
-      serverName: 'Sophie'
-    }
-  ]
+      serverName: 'Sophie',
+    },
+  ];
 
   // Mock data for cleaning tasks
   const cleaningTasks: CleaningTask[] = [
@@ -149,7 +151,7 @@ export default function RunnerScreen() {
       requestedTime: '14:30',
       requestedBy: 'Marie',
       status: 'pending',
-      notes: 'Table sale, besoin de nettoyage rapide'
+      notes: 'Table sale, besoin de nettoyage rapide',
     },
     {
       id: 'CLEAN-002',
@@ -158,19 +160,19 @@ export default function RunnerScreen() {
       priority: 'normal',
       requestedTime: '14:25',
       requestedBy: 'Jean',
-      status: 'in_progress'
+      status: 'in_progress',
     },
     {
       id: 'CLEAN-003',
-      tableNumber: 'zone_salle',
+      tableNumber: 0,
       type: 'floor',
       priority: 'low',
       requestedTime: '14:15',
       requestedBy: 'Sophie',
       status: 'pending',
-      notes: 'Petit renversement près de la table 4'
-    }
-  ]
+      notes: 'Petit renversement près de la table 4',
+    },
+  ];
 
   // Mock data for delivery tasks
   const deliveryTasks: DeliveryTask[] = [
@@ -181,7 +183,7 @@ export default function RunnerScreen() {
       items: ['Burger Classic ×2', 'Frites ×2'],
       pickupLocation: 'kitchen',
       status: 'pending',
-      estimatedTime: 3
+      estimatedTime: 3,
     },
     {
       id: 'DELIVERY-002',
@@ -191,68 +193,92 @@ export default function RunnerScreen() {
       pickupLocation: 'bar',
       status: 'picked_up',
       assignedRunner: 'Paul',
-      estimatedTime: 2
-    }
-  ]
+      estimatedTime: 2,
+    },
+  ];
 
   const updateTaskStatus = (taskId: string, status: string) => {
     // In a real app, this would update the backend
-    console.log(`Task ${taskId} status updated to ${status}`)
-  }
+    console.log(`Task ${taskId} status updated to ${status}`);
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800'
-      case 'normal': return 'bg-blue-100 text-blue-800'
-      case 'low': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      case 'normal':
+        return 'bg-blue-100 text-blue-800';
+      case 'low':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getTemperatureColor = (temperature: string) => {
     switch (temperature) {
-      case 'hot': return 'bg-red-100 text-red-800'
-      case 'cold': return 'bg-blue-100 text-blue-800'
-      case 'ambient': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'hot':
+        return 'bg-red-100 text-red-800';
+      case 'cold':
+        return 'bg-blue-100 text-blue-800';
+      case 'ambient':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getCleaningTypeIcon = (type: string) => {
     switch (type) {
-      case 'table': return <Utensils className="h-4 w-4" />
-      case 'floor': return <MapPin className="h-4 w-4" />
-      case 'dishes': return <Wrench className="h-4 w-4" />
-      case 'equipment': return <Wrench className="h-4 w-4" />
-      default: return <Wrench className="h-4 w-4" />
+      case 'table':
+        return <Utensils className="h-4 w-4" />;
+      case 'floor':
+        return <MapPin className="h-4 w-4" />;
+      case 'dishes':
+        return <Wrench className="h-4 w-4" />;
+      case 'equipment':
+        return <Wrench className="h-4 w-4" />;
+      default:
+        return <Wrench className="h-4 w-4" />;
     }
-  }
+  };
 
   const getPickupLocationIcon = (location: string) => {
     switch (location) {
-      case 'kitchen': return <ChefHat className="h-4 w-4" />
-      case 'bar': return <Cocktail className="h-4 w-4" />
-      default: return <Truck className="h-4 w-4" />
+      case 'kitchen':
+        return <ChefHat className="h-4 w-4" />;
+      case 'bar':
+        return <Martini className="h-4 w-4" />;
+      default:
+        return <Truck className="h-4 w-4" />;
     }
-  }
+  };
 
   const getCleaningStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'in_progress': return 'bg-blue-100 text-blue-800'
-      case 'completed': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'in_progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getDeliveryStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'picked_up': return 'bg-blue-100 text-blue-800'
-      case 'delivered': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'picked_up':
+        return 'bg-blue-100 text-blue-800';
+      case 'delivered':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -291,8 +317,8 @@ export default function RunnerScreen() {
         <TabsContent value="pickup" className="space-y-4">
           <div className="grid gap-4">
             {readyOrders.map((order) => (
-              <Card 
-                key={order.id} 
+              <Card
+                key={order.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedTask?.id === order.id ? 'ring-2 ring-green-500' : ''
                 }`}
@@ -345,11 +371,11 @@ export default function RunnerScreen() {
                       <Users className="h-4 w-4 inline mr-1" />
                       Serveur: {order.serverName}
                     </div>
-                    <Button 
+                    <Button
                       size="sm"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        updateTaskStatus(order.id, 'picked_up')
+                        e.stopPropagation();
+                        updateTaskStatus(order.id, 'picked_up');
                       }}
                     >
                       <Truck className="h-4 w-4 mr-1" />
@@ -366,8 +392,8 @@ export default function RunnerScreen() {
         <TabsContent value="delivery" className="space-y-4">
           <div className="grid gap-4">
             {deliveryTasks.map((task) => (
-              <Card 
-                key={task.id} 
+              <Card
+                key={task.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedTask?.id === task.id ? 'ring-2 ring-blue-500' : ''
                 }`}
@@ -409,22 +435,22 @@ export default function RunnerScreen() {
                     </div>
                     <div className="flex gap-2">
                       {task.status === 'pending' && (
-                        <Button 
+                        <Button
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateTaskStatus(task.id, 'picked_up')
+                            e.stopPropagation();
+                            updateTaskStatus(task.id, 'picked_up');
                           }}
                         >
                           Récupérer
                         </Button>
                       )}
                       {task.status === 'picked_up' && (
-                        <Button 
+                        <Button
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateTaskStatus(task.id, 'delivered')
+                            e.stopPropagation();
+                            updateTaskStatus(task.id, 'delivered');
                           }}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" />
@@ -443,8 +469,8 @@ export default function RunnerScreen() {
         <TabsContent value="cleaning" className="space-y-4">
           <div className="grid gap-4">
             {cleaningTasks.map((task) => (
-              <Card 
-                key={task.id} 
+              <Card
+                key={task.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedTask?.id === task.id ? 'ring-2 ring-orange-500' : ''
                 }`}
@@ -489,27 +515,25 @@ export default function RunnerScreen() {
                   )}
 
                   <div className="flex items-center justify-between pt-3 border-t">
-                    <div className="text-sm text-gray-500">
-                      Demandé par: {task.requestedBy}
-                    </div>
+                    <div className="text-sm text-gray-500">Demandé par: {task.requestedBy}</div>
                     <div className="flex gap-2">
                       {task.status === 'pending' && (
-                        <Button 
+                        <Button
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateTaskStatus(task.id, 'in_progress')
+                            e.stopPropagation();
+                            updateTaskStatus(task.id, 'in_progress');
                           }}
                         >
                           Commencer
                         </Button>
                       )}
                       {task.status === 'in_progress' && (
-                        <Button 
+                        <Button
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            updateTaskStatus(task.id, 'completed')
+                            e.stopPropagation();
+                            updateTaskStatus(task.id, 'completed');
                           }}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" />
@@ -525,5 +549,5 @@ export default function RunnerScreen() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
