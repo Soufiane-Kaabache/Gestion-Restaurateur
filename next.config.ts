@@ -15,11 +15,6 @@ const nextConfig: NextConfig = {
     // keep defaults; customize resolveExtensions if you need to add extras
     resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.json'],
   },
-  experimental: {
-    // Enable Turbopack filesystem cache for faster rebuilds (opt-in, Next.js >=15.3+)
-    turbopackFileSystemCacheForDev: true,
-    turbopackFileSystemCacheForBuild: true,
-  },
   eslint: {
     // 构建时忽略ESLint错误
     ignoreDuringBuilds: true,
