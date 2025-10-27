@@ -5,18 +5,18 @@ import { Server } from 'socket.io';
 import next from 'next';
 
 const dev = process.env.NODE_ENV !== 'production';
-const currentPort = 3000;
-const hostname = '127.0.0.1';
+const currentPort = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const hostname = process.env.HOST || '127.0.0.1';
 
 // Custom server with Socket.IO integration
 async function createCustomServer() {
   try {
     // Create Next.js app
-    const nextApp = next({ 
+    const nextApp = next({
       dev,
       dir: process.cwd(),
       // In production, use the current directory where .next is located
-      conf: dev ? undefined : { distDir: './.next' }
+      conf: dev ? undefined : { distDir: './.next' },
     });
 
     await nextApp.prepare();
@@ -35,9 +35,9 @@ async function createCustomServer() {
     const io = new Server(server, {
       path: '/api/socketio',
       cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-      }
+        origin: '*',
+        methods: ['GET', 'POST'],
+      },
     });
 
     setupSocket(io);
@@ -46,8 +46,10 @@ async function createCustomServer() {
     server.listen(currentPort, hostname, () => {
       console.log(`> Ready on http://${hostname}:${currentPort}`);
       console.log(`> Socket.IO server running at ws://${hostname}:${currentPort}/api/socketio`);
+      if (process.env.APP_ROLE) {
+        console.log(`> App role: ${process.env.APP_ROLE}`);
+      }
     });
-
   } catch (err) {
     console.error('Server startup error:', err);
     process.exit(1);
