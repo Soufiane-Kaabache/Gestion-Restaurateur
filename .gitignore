@@ -6,6 +6,11 @@ node_modules/
 out/
 
 # Build output
+.env.gerant
+.env.serveur
+.env.bar
+.env.cuisine
+!.env.example
 dist/
 
 # Env files

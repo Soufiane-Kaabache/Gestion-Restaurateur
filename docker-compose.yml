@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  gerant:
+    build: .
+    container_name: restaurant_gerant
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - APP_ROLE=gerant
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  serveur:
+    build: .
+    container_name: restaurant_serveur
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - APP_ROLE=serveur
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  bar:
+    build: .
+    container_name: restaurant_bar
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - APP_ROLE=bar
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  cuisine:
+    build: .
+    container_name: restaurant_cuisine
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - APP_ROLE=cuisine
+      - NODE_ENV=production
+    restart: unless-stopped
+
+networks:
+  default:
+    name: restaurant_network
