@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -7,14 +7,18 @@ const nextConfig: NextConfig = {
   },
   // 禁用 Next.js 热重载，由 nodemon 处理重编译
   reactStrictMode: false,
-  webpack: (config, { dev }) => {
-    if (dev) {
-      // 禁用 webpack 的热模块替换
-      config.watchOptions = {
-        ignored: ['**/*'], // 忽略所有文件变化
-      };
-    }
-    return config;
+  // NOTE: Previously we provided a custom webpack() config. That prevents Next.js
+  // from using Turbopack. Turbopack is the default bundler and offers much faster
+  // dev/builder experience. To enable Turbopack and its filesystem cache, remove
+  // custom webpack hooks and set turbopack/experimental options below.
+  turbopack: {
+    // keep defaults; customize resolveExtensions if you need to add extras
+    resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.json'],
+  },
+  experimental: {
+    // Enable Turbopack filesystem cache for faster rebuilds (opt-in, Next.js >=15.3+)
+    turbopackFileSystemCacheForDev: true,
+    turbopackFileSystemCacheForBuild: true,
   },
   eslint: {
     // 构建时忽略ESLint错误
