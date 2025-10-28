@@ -12,9 +12,15 @@ const hostname = process.env.HOST || '127.0.0.1';
 // Custom server with Socket.IO integration
 async function createCustomServer() {
   try {
-    // Validate Mailtrap configuration early in dev/staging
-    // This will exit the process with code 1 if Mailtrap credentials are missing.
-    validateMailConfig();
+    // Validate Mailtrap configuration only in production
+    // In local development we don't want missing Mailtrap creds to block startup.
+    if (process.env.NODE_ENV === 'production') {
+      // This will exit the process with code 1 if Mailtrap credentials are missing.
+      validateMailConfig();
+    } else {
+      // Helpful log for local dev to know validation is skipped
+      console.log('Skipping Mailtrap validation in non-production environment');
+    }
     // Create Next.js app
     const nextApp = next({
       dev,

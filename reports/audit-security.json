@@ -1,0 +1,176 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "next": {
+      "name": "next",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1107228,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js Affected by Cache Key Confusion for Image Optimization API Routes",
+          "url": "https://github.com/advisories/GHSA-g5qg-72qw-gw5v",
+          "severity": "moderate",
+          "cwe": ["CWE-524"],
+          "cvss": {
+            "score": 6.2,
+            "vectorString": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": ">=15.0.0 <=15.4.4"
+        },
+        {
+          "source": 1107514,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js Content Injection Vulnerability for Image Optimization",
+          "url": "https://github.com/advisories/GHSA-xv57-4mr9-wg8v",
+          "severity": "moderate",
+          "cwe": ["CWE-20"],
+          "cvss": {
+            "score": 4.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=15.0.0 <=15.4.4"
+        },
+        {
+          "source": 1107515,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js Improper Middleware Redirect Handling Leads to SSRF",
+          "url": "https://github.com/advisories/GHSA-4342-x723-ch2f",
+          "severity": "moderate",
+          "cwe": ["CWE-918"],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:N"
+          },
+          "range": ">=15.0.0-canary.0 <15.4.7"
+        }
+      ],
+      "effects": [],
+      "range": "15.0.0-canary.0 - 15.4.6",
+      "nodes": ["node_modules/next"],
+      "fixAvailable": {
+        "name": "next",
+        "version": "15.5.6",
+        "isSemVerMajor": false
+      }
+    },
+    "next-auth": {
+      "name": "next-auth",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": ["nodemailer"],
+      "effects": [],
+      "range": "<=0.0.0-semantically-released || 1.1.0 - 1.5.0 || 2.0.0-beta.0 - 4.24.11 || 5.0.0-beta.0 - 5.0.0-beta.29",
+      "nodes": ["node_modules/next-auth"],
+      "fixAvailable": true
+    },
+    "nodemailer": {
+      "name": "nodemailer",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1108571,
+          "name": "nodemailer",
+          "dependency": "nodemailer",
+          "title": "Nodemailer: Email to an unintended domain can occur due to Interpretation Conflict",
+          "url": "https://github.com/advisories/GHSA-mm7p-fcc7-pg87",
+          "severity": "moderate",
+          "cwe": ["CWE-20", "CWE-436"],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<7.0.7"
+        }
+      ],
+      "effects": ["next-auth"],
+      "range": "<7.0.7",
+      "nodes": ["node_modules/nodemailer"],
+      "fixAvailable": {
+        "name": "nodemailer",
+        "version": "7.0.10",
+        "isSemVerMajor": true
+      }
+    },
+    "prismjs": {
+      "name": "prismjs",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1105770,
+          "name": "prismjs",
+          "dependency": "prismjs",
+          "title": "PrismJS DOM Clobbering vulnerability",
+          "url": "https://github.com/advisories/GHSA-x7hr-w5r2-h6wg",
+          "severity": "moderate",
+          "cwe": ["CWE-79", "CWE-94"],
+          "cvss": {
+            "score": 4.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:L/I:L/A:N"
+          },
+          "range": "<1.30.0"
+        }
+      ],
+      "effects": ["refractor"],
+      "range": "<1.30.0",
+      "nodes": ["node_modules/refractor/node_modules/prismjs"],
+      "fixAvailable": {
+        "name": "react-syntax-highlighter",
+        "version": "16.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "react-syntax-highlighter": {
+      "name": "react-syntax-highlighter",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": ["refractor"],
+      "effects": [],
+      "range": "6.0.0 - 15.6.6",
+      "nodes": ["node_modules/react-syntax-highlighter"],
+      "fixAvailable": {
+        "name": "react-syntax-highlighter",
+        "version": "16.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "refractor": {
+      "name": "refractor",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": ["prismjs"],
+      "effects": ["react-syntax-highlighter"],
+      "range": "<=4.6.0",
+      "nodes": ["node_modules/refractor"],
+      "fixAvailable": {
+        "name": "react-syntax-highlighter",
+        "version": "16.0.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 6,
+      "high": 0,
+      "critical": 0,
+      "total": 6
+    },
+    "dependencies": {
+      "prod": 589,
+      "dev": 654,
+      "optional": 135,
+      "peer": 56,
+      "peerOptional": 0,
+      "total": 1379
+    }
+  }
+}

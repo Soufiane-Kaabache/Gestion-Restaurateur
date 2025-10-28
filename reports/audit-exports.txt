@@ -1,0 +1,280 @@
+middleware.ts:11 - middleware
+middleware.ts:37 - config
+next.config.ts:24 - default
+tailwind.config.ts:275 - default
+vitest.config.ts:4 - default
+examples/websocket/page.tsx:16 - default
+src/hooks/use-toast.ts:73 - reducer (used in module)
+src/hooks/use-toast.ts:188 - toast (used in module)
+src/lib/mailer.ts:16 - sendMail (used in module)
+src/lib/mailer.ts:136 - notifyStaff (used in module)
+src/lib/mailer.ts:214 - notifyNewOrder
+src/lib/mailer.ts:244 - notifyDrinksOrder
+src/lib/socket-client.ts:10 - getSocketUrl (used in module)
+src/lib/socket-client.ts:21 - getSocket (used in module)
+src/lib/socket-client.ts:31 - default
+src/lib/utils.ts:24 - formatDate (used in module)
+src/lib/utils.ts:37 - formatTime (used in module)
+src/lib/utils.ts:59 - getDayName
+src/lib/utils.ts:67 - isToday
+src/lib/utils.ts:80 - isPast
+src/lib/utils.ts:88 - daysBetween
+src/lib/utils.ts:103 - formatPrice
+src/lib/utils.ts:114 - calculatePercentage
+src/lib/utils.ts:126 - isValidEmail
+src/lib/utils.ts:135 - maskEmail
+src/lib/utils.ts:148 - isValidPhone
+src/lib/utils.ts:158 - formatPhone
+src/lib/utils.ts:167 - maskPhone
+src/lib/utils.ts:229 - getRoleColor
+src/lib/utils.ts:243 - getRoleLabel
+src/lib/utils.ts:257 - getRoleIcon
+src/lib/utils.ts:276 - capitalize
+src/lib/utils.ts:284 - truncate
+src/lib/utils.ts:293 - slugify
+src/lib/utils.ts:306 - getInitials
+src/lib/utils.ts:322 - generateId
+src/lib/utils.ts:329 - sleep
+src/lib/utils.ts:336 - copyToClipboard
+src/lib/utils.ts:348 - downloadFile
+src/lib/utils.ts:362 - formatNumber
+src/lib/utils.ts:369 - debounce
+src/lib/utils.ts:383 - throttle
+src/lib/utils.ts:405 - hexToRgb
+src/lib/utils.ts:414 - randomColor
+src/mailer/notification-types.ts:20 - NotificationRecipient
+src/mailer/notification-types.ts:31 - NotificationRules
+.next/types/app/layout.ts:54 - PageProps
+.next/types/app/layout.ts:58 - LayoutProps (used in module)
+.next/types/app/page.ts:54 - PageProps (used in module)
+.next/types/app/page.ts:58 - LayoutProps
+src/components/orders/OrderForm.tsx:15 - OrderItem (used in module)
+src/components/payment/PaymentForm.tsx:39 - SplitPayment (used in module)
+src/components/reservations/DateTimePicker.tsx:8 - DateTimePickerProps (used in module)
+src/components/reservations/DateTimePicker.tsx:29 - DateTimePicker (used in module)
+src/components/reservations/ReservationCard.tsx:4 - Reservation (used in module)
+src/components/reservations/ReservationCard.tsx:20 - ReservationCard (used in module)
+src/components/server/ServerView.tsx:37 - ServerView
+src/components/ui/accordion.tsx:66 - Accordion (used in module)
+src/components/ui/accordion.tsx:66 - AccordionItem (used in module)
+src/components/ui/accordion.tsx:66 - AccordionTrigger (used in module)
+src/components/ui/accordion.tsx:66 - AccordionContent (used in module)
+src/components/ui/alert-dialog.tsx:146 - AlertDialog (used in module)
+src/components/ui/alert-dialog.tsx:147 - AlertDialogPortal (used in module)
+src/components/ui/alert-dialog.tsx:148 - AlertDialogOverlay (used in module)
+src/components/ui/alert-dialog.tsx:149 - AlertDialogTrigger (used in module)
+src/components/ui/alert-dialog.tsx:150 - AlertDialogContent (used in module)
+src/components/ui/alert-dialog.tsx:151 - AlertDialogHeader (used in module)
+src/components/ui/alert-dialog.tsx:152 - AlertDialogFooter (used in module)
+src/components/ui/alert-dialog.tsx:153 - AlertDialogTitle (used in module)
+src/components/ui/alert-dialog.tsx:154 - AlertDialogDescription (used in module)
+src/components/ui/alert-dialog.tsx:155 - AlertDialogAction (used in module)
+src/components/ui/alert-dialog.tsx:156 - AlertDialogCancel (used in module)
+src/components/ui/alert.tsx:66 - Alert (used in module)
+src/components/ui/alert.tsx:66 - AlertTitle (used in module)
+src/components/ui/alert.tsx:66 - AlertDescription (used in module)
+src/components/ui/aspect-ratio.tsx:11 - AspectRatio (used in module)
+src/components/ui/avatar.tsx:53 - Avatar (used in module)
+src/components/ui/avatar.tsx:53 - AvatarImage (used in module)
+src/components/ui/avatar.tsx:53 - AvatarFallback (used in module)
+src/components/ui/badge.tsx:46 - badgeVariants (used in module)
+src/components/ui/breadcrumb.tsx:102 - Breadcrumb (used in module)
+src/components/ui/breadcrumb.tsx:103 - BreadcrumbList (used in module)
+src/components/ui/breadcrumb.tsx:104 - BreadcrumbItem (used in module)
+src/components/ui/breadcrumb.tsx:105 - BreadcrumbLink (used in module)
+src/components/ui/breadcrumb.tsx:106 - BreadcrumbPage (used in module)
+src/components/ui/breadcrumb.tsx:107 - BreadcrumbSeparator (used in module)
+src/components/ui/breadcrumb.tsx:108 - BreadcrumbEllipsis (used in module)
+src/components/ui/calendar.tsx:213 - CalendarDayButton (used in module)
+src/components/ui/card.tsx:89 - CardAction (used in module)
+src/components/ui/carousel.tsx:235 - CarouselApi (used in module)
+src/components/ui/carousel.tsx:236 - Carousel (used in module)
+src/components/ui/carousel.tsx:237 - CarouselContent (used in module)
+src/components/ui/carousel.tsx:238 - CarouselItem (used in module)
+src/components/ui/carousel.tsx:239 - CarouselPrevious (used in module)
+src/components/ui/carousel.tsx:240 - CarouselNext (used in module)
+src/components/ui/chart.tsx:11 - ChartConfig (used in module)
+src/components/ui/chart.tsx:347 - ChartContainer (used in module)
+src/components/ui/chart.tsx:348 - ChartTooltip (used in module)
+src/components/ui/chart.tsx:349 - ChartTooltipContent (used in module)
+src/components/ui/chart.tsx:350 - ChartLegend (used in module)
+src/components/ui/chart.tsx:351 - ChartLegendContent (used in module)
+src/components/ui/chart.tsx:352 - ChartStyle (used in module)
+src/components/ui/checkbox.tsx:32 - Checkbox (used in module)
+src/components/ui/collapsible.tsx:33 - Collapsible (used in module)
+src/components/ui/collapsible.tsx:33 - CollapsibleTrigger (used in module)
+src/components/ui/collapsible.tsx:33 - CollapsibleContent (used in module)
+src/components/ui/command.tsx:175 - Command (used in module)
+src/components/ui/command.tsx:176 - CommandDialog (used in module)
+src/components/ui/command.tsx:177 - CommandInput (used in module)
+src/components/ui/command.tsx:178 - CommandList (used in module)
+src/components/ui/command.tsx:179 - CommandEmpty (used in module)
+src/components/ui/command.tsx:180 - CommandGroup (used in module)
+src/components/ui/command.tsx:181 - CommandItem (used in module)
+src/components/ui/command.tsx:182 - CommandShortcut (used in module)
+src/components/ui/command.tsx:183 - CommandSeparator (used in module)
+src/components/ui/context-menu.tsx:237 - ContextMenu (used in module)
+src/components/ui/context-menu.tsx:238 - ContextMenuTrigger (used in module)
+src/components/ui/context-menu.tsx:239 - ContextMenuContent (used in module)
+src/components/ui/context-menu.tsx:240 - ContextMenuItem (used in module)
+src/components/ui/context-menu.tsx:241 - ContextMenuCheckboxItem (used in module)
+src/components/ui/context-menu.tsx:242 - ContextMenuRadioItem (used in module)
+src/components/ui/context-menu.tsx:243 - ContextMenuLabel (used in module)
+src/components/ui/context-menu.tsx:244 - ContextMenuSeparator (used in module)
+src/components/ui/context-menu.tsx:245 - ContextMenuShortcut (used in module)
+src/components/ui/context-menu.tsx:246 - ContextMenuGroup (used in module)
+src/components/ui/context-menu.tsx:247 - ContextMenuPortal (used in module)
+src/components/ui/context-menu.tsx:248 - ContextMenuSub (used in module)
+src/components/ui/context-menu.tsx:249 - ContextMenuSubContent (used in module)
+src/components/ui/context-menu.tsx:250 - ContextMenuSubTrigger (used in module)
+src/components/ui/context-menu.tsx:251 - ContextMenuRadioGroup (used in module)
+src/components/ui/dialog.tsx:134 - DialogClose (used in module)
+src/components/ui/dialog.tsx:137 - DialogFooter (used in module)
+src/components/ui/dialog.tsx:139 - DialogOverlay (used in module)
+src/components/ui/dialog.tsx:140 - DialogPortal (used in module)
+src/components/ui/dialog.tsx:142 - DialogTrigger (used in module)
+src/components/ui/drawer.tsx:125 - Drawer (used in module)
+src/components/ui/drawer.tsx:126 - DrawerPortal (used in module)
+src/components/ui/drawer.tsx:127 - DrawerOverlay (used in module)
+src/components/ui/drawer.tsx:128 - DrawerTrigger (used in module)
+src/components/ui/drawer.tsx:129 - DrawerClose (used in module)
+src/components/ui/drawer.tsx:130 - DrawerContent (used in module)
+src/components/ui/drawer.tsx:131 - DrawerHeader (used in module)
+src/components/ui/drawer.tsx:132 - DrawerFooter (used in module)
+src/components/ui/drawer.tsx:133 - DrawerTitle (used in module)
+src/components/ui/drawer.tsx:134 - DrawerDescription (used in module)
+src/components/ui/dropdown-menu.tsx:243 - DropdownMenuPortal (used in module)
+src/components/ui/dropdown-menu.tsx:246 - DropdownMenuGroup (used in module)
+src/components/ui/dropdown-menu.tsx:247 - DropdownMenuLabel (used in module)
+src/components/ui/dropdown-menu.tsx:249 - DropdownMenuCheckboxItem (used in module)
+src/components/ui/dropdown-menu.tsx:250 - DropdownMenuRadioGroup (used in module)
+src/components/ui/dropdown-menu.tsx:251 - DropdownMenuRadioItem (used in module)
+src/components/ui/dropdown-menu.tsx:252 - DropdownMenuSeparator (used in module)
+src/components/ui/dropdown-menu.tsx:253 - DropdownMenuShortcut (used in module)
+src/components/ui/dropdown-menu.tsx:254 - DropdownMenuSub (used in module)
+src/components/ui/dropdown-menu.tsx:255 - DropdownMenuSubTrigger (used in module)
+src/components/ui/dropdown-menu.tsx:256 - DropdownMenuSubContent (used in module)
+src/components/ui/form.tsx:159 - useFormField (used in module)
+src/components/ui/form.tsx:160 - Form (used in module)
+src/components/ui/form.tsx:161 - FormItem (used in module)
+src/components/ui/form.tsx:162 - FormLabel (used in module)
+src/components/ui/form.tsx:163 - FormControl (used in module)
+src/components/ui/form.tsx:164 - FormDescription (used in module)
+src/components/ui/form.tsx:165 - FormMessage (used in module)
+src/components/ui/form.tsx:166 - FormField (used in module)
+src/components/ui/hover-card.tsx:44 - HoverCard (used in module)
+src/components/ui/hover-card.tsx:44 - HoverCardTrigger (used in module)
+src/components/ui/hover-card.tsx:44 - HoverCardContent (used in module)
+src/components/ui/input-otp.tsx:77 - InputOTP (used in module)
+src/components/ui/input-otp.tsx:77 - InputOTPGroup (used in module)
+src/components/ui/input-otp.tsx:77 - InputOTPSlot (used in module)
+src/components/ui/input-otp.tsx:77 - InputOTPSeparator (used in module)
+src/components/ui/menubar.tsx:260 - Menubar (used in module)
+src/components/ui/menubar.tsx:261 - MenubarPortal (used in module)
+src/components/ui/menubar.tsx:262 - MenubarMenu (used in module)
+src/components/ui/menubar.tsx:263 - MenubarTrigger (used in module)
+src/components/ui/menubar.tsx:264 - MenubarContent (used in module)
+src/components/ui/menubar.tsx:265 - MenubarGroup (used in module)
+src/components/ui/menubar.tsx:266 - MenubarSeparator (used in module)
+src/components/ui/menubar.tsx:267 - MenubarLabel (used in module)
+src/components/ui/menubar.tsx:268 - MenubarItem (used in module)
+src/components/ui/menubar.tsx:269 - MenubarShortcut (used in module)
+src/components/ui/menubar.tsx:270 - MenubarCheckboxItem (used in module)
+src/components/ui/menubar.tsx:271 - MenubarRadioGroup (used in module)
+src/components/ui/menubar.tsx:272 - MenubarRadioItem (used in module)
+src/components/ui/menubar.tsx:273 - MenubarSub (used in module)
+src/components/ui/menubar.tsx:274 - MenubarSubTrigger (used in module)
+src/components/ui/menubar.tsx:275 - MenubarSubContent (used in module)
+src/components/ui/navigation-menu.tsx:159 - NavigationMenu (used in module)
+src/components/ui/navigation-menu.tsx:160 - NavigationMenuList (used in module)
+src/components/ui/navigation-menu.tsx:161 - NavigationMenuItem (used in module)
+src/components/ui/navigation-menu.tsx:162 - NavigationMenuContent (used in module)
+src/components/ui/navigation-menu.tsx:163 - NavigationMenuTrigger (used in module)
+src/components/ui/navigation-menu.tsx:164 - NavigationMenuLink (used in module)
+src/components/ui/navigation-menu.tsx:165 - NavigationMenuIndicator (used in module)
+src/components/ui/navigation-menu.tsx:166 - NavigationMenuViewport (used in module)
+src/components/ui/navigation-menu.tsx:167 - navigationMenuTriggerStyle (used in module)
+src/components/ui/pagination.tsx:120 - Pagination (used in module)
+src/components/ui/pagination.tsx:121 - PaginationContent (used in module)
+src/components/ui/pagination.tsx:122 - PaginationLink (used in module)
+src/components/ui/pagination.tsx:123 - PaginationItem (used in module)
+src/components/ui/pagination.tsx:124 - PaginationPrevious (used in module)
+src/components/ui/pagination.tsx:125 - PaginationNext (used in module)
+src/components/ui/pagination.tsx:126 - PaginationEllipsis (used in module)
+src/components/ui/popover.tsx:48 - Popover (used in module)
+src/components/ui/popover.tsx:48 - PopoverTrigger (used in module)
+src/components/ui/popover.tsx:48 - PopoverContent (used in module)
+src/components/ui/popover.tsx:48 - PopoverAnchor (used in module)
+src/components/ui/resizable.tsx:56 - ResizablePanelGroup (used in module)
+src/components/ui/resizable.tsx:56 - ResizablePanel (used in module)
+src/components/ui/resizable.tsx:56 - ResizableHandle (used in module)
+src/components/ui/scroll-area.tsx:58 - ScrollBar (used in module)
+src/components/ui/select.tsx:177 - SelectGroup (used in module)
+src/components/ui/select.tsx:179 - SelectLabel (used in module)
+src/components/ui/select.tsx:180 - SelectScrollDownButton (used in module)
+src/components/ui/select.tsx:181 - SelectScrollUpButton (used in module)
+src/components/ui/select.tsx:182 - SelectSeparator (used in module)
+src/components/ui/sheet.tsx:132 - SheetTrigger (used in module)
+src/components/ui/sheet.tsx:133 - SheetClose (used in module)
+src/components/ui/sheet.tsx:136 - SheetFooter (used in module)
+src/components/ui/sidebar.tsx:671 - Sidebar (used in module)
+src/components/ui/sidebar.tsx:672 - SidebarContent (used in module)
+src/components/ui/sidebar.tsx:673 - SidebarFooter (used in module)
+src/components/ui/sidebar.tsx:674 - SidebarGroup (used in module)
+src/components/ui/sidebar.tsx:675 - SidebarGroupAction (used in module)
+src/components/ui/sidebar.tsx:676 - SidebarGroupContent (used in module)
+src/components/ui/sidebar.tsx:677 - SidebarGroupLabel (used in module)
+src/components/ui/sidebar.tsx:678 - SidebarHeader (used in module)
+src/components/ui/sidebar.tsx:679 - SidebarInput (used in module)
+src/components/ui/sidebar.tsx:680 - SidebarInset (used in module)
+src/components/ui/sidebar.tsx:681 - SidebarMenu (used in module)
+src/components/ui/sidebar.tsx:682 - SidebarMenuAction (used in module)
+src/components/ui/sidebar.tsx:683 - SidebarMenuBadge (used in module)
+src/components/ui/sidebar.tsx:684 - SidebarMenuButton (used in module)
+src/components/ui/sidebar.tsx:685 - SidebarMenuItem (used in module)
+src/components/ui/sidebar.tsx:686 - SidebarMenuSkeleton (used in module)
+src/components/ui/sidebar.tsx:687 - SidebarMenuSub (used in module)
+src/components/ui/sidebar.tsx:688 - SidebarMenuSubButton (used in module)
+src/components/ui/sidebar.tsx:689 - SidebarMenuSubItem (used in module)
+src/components/ui/sidebar.tsx:690 - SidebarProvider (used in module)
+src/components/ui/sidebar.tsx:691 - SidebarRail (used in module)
+src/components/ui/sidebar.tsx:692 - SidebarSeparator (used in module)
+src/components/ui/sidebar.tsx:693 - SidebarTrigger (used in module)
+src/components/ui/sidebar.tsx:694 - useSidebar (used in module)
+src/components/ui/slider.tsx:63 - Slider (used in module)
+src/components/ui/table.tsx:108 - Table (used in module)
+src/components/ui/table.tsx:109 - TableHeader (used in module)
+src/components/ui/table.tsx:110 - TableBody (used in module)
+src/components/ui/table.tsx:111 - TableFooter (used in module)
+src/components/ui/table.tsx:112 - TableHead (used in module)
+src/components/ui/table.tsx:113 - TableRow (used in module)
+src/components/ui/table.tsx:114 - TableCell (used in module)
+src/components/ui/table.tsx:115 - TableCaption (used in module)
+src/components/ui/toast.tsx:128 - ToastAction (used in module)
+src/components/ui/toggle-group.tsx:73 - ToggleGroup (used in module)
+src/components/ui/toggle-group.tsx:73 - ToggleGroupItem (used in module)
+src/components/ui/toggle.tsx:47 - Toggle (used in module)
+.next/types/app/analytics/page.ts:54 - PageProps (used in module)
+.next/types/app/analytics/page.ts:58 - LayoutProps
+.next/types/app/bar/page.ts:54 - PageProps (used in module)
+.next/types/app/bar/page.ts:58 - LayoutProps
+.next/types/app/kitchen/page.ts:54 - PageProps (used in module)
+.next/types/app/kitchen/page.ts:58 - LayoutProps
+.next/types/app/menu/page.ts:54 - PageProps (used in module)
+.next/types/app/menu/page.ts:58 - LayoutProps
+.next/types/app/orders/page.ts:54 - PageProps (used in module)
+.next/types/app/orders/page.ts:58 - LayoutProps
+.next/types/app/payment/page.ts:54 - PageProps (used in module)
+.next/types/app/payment/page.ts:58 - LayoutProps
+.next/types/app/reservations/page.ts:54 - PageProps (used in module)
+.next/types/app/reservations/page.ts:58 - LayoutProps
+.next/types/app/runner/page.ts:54 - PageProps (used in module)
+.next/types/app/runner/page.ts:58 - LayoutProps
+.next/types/app/server/page.ts:54 - PageProps (used in module)
+.next/types/app/server/page.ts:58 - LayoutProps
+.next/types/app/tables/page.ts:54 - PageProps (used in module)
+.next/types/app/tables/page.ts:58 - LayoutProps
+src/app/api/reservations/route.ts:5 - POST
+src/app/test/datepicker/page.tsx:8 - default
+.next/types/app/api/health/route.ts:313 - PageProps
+.next/types/app/api/health/route.ts:317 - LayoutProps

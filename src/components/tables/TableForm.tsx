@@ -105,13 +105,13 @@ export function TableForm({ table, onSubmit, onCancel }: TableFormProps) {
             <Label htmlFor="section">Section (optionnel)</Label>
             <Select
               value={formData.section}
-              onValueChange={(value) => handleChange('section', value)}
+              onValueChange={(value) => handleChange('section', value === 'none' ? '' : value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionner une section" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Aucune</SelectItem>
+                <SelectItem value="none">Aucune</SelectItem>
                 <SelectItem value="terrasse">Terrasse</SelectItem>
                 <SelectItem value="salle">Salle principale</SelectItem>
                 <SelectItem value="privé">Salle privée</SelectItem>
