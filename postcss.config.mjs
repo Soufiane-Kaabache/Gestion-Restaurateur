@@ -1,6 +1,7 @@
-import tailwindPostcss from '@tailwindcss/postcss';
-import autoprefixer from 'autoprefixer';
-
+// Use plugin names as keys so Next.js can resolve PostCSS plugins correctly.
 export default {
-  plugins: [tailwindPostcss, autoprefixer],
+  plugins: {
+    '@tailwindcss/postcss': {},
+    'autoprefixer': {},
+  },
 };
