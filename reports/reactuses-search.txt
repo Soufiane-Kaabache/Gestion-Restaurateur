@@ -1,0 +1,4 @@
+./package.json:    "@reactuses/core": "^6.0.5",
+./package-lock.json:        "@reactuses/core": "^6.0.5",
+./package-lock.json:    "node_modules/@reactuses/core": {
+./package-lock.json:      "resolved": "https://registry.npmjs.org/@reactuses/core/-/core-6.1.0.tgz",

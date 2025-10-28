@@ -1,0 +1,7 @@
+./package.json:    "@mdxeditor/editor": "^3.39.1",
+./package-lock.json:        "@mdxeditor/editor": "^3.39.1",
+./package-lock.json:    "node_modules/@mdxeditor/editor": {
+./package-lock.json:      "resolved": "https://registry.npmjs.org/@mdxeditor/editor/-/editor-3.47.0.tgz",
+./package-lock.json:        "@mdxeditor/gurx": "^1.2.4",
+./package-lock.json:    "node_modules/@mdxeditor/gurx": {
+./package-lock.json:      "resolved": "https://registry.npmjs.org/@mdxeditor/gurx/-/gurx-1.2.4.tgz",

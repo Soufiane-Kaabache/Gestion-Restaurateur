@@ -15,7 +15,7 @@ export default defineConfig({
     ],
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/setupTests.ts'],
+    setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
@@ -36,6 +36,11 @@ export default defineConfig({
         functions: 60,
         branches: 60,
         statements: 60,
+      },
+    },
+    css: {
+      modules: {
+        classNameStrategy: 'non-scoped',
       },
     },
     alias: {

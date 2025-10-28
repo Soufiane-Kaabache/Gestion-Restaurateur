@@ -1,0 +1,4 @@
+./reports/AUDIT_SUMMARY.md:   - `@mdxeditor/editor` — présent uniquement dans `package.json` / `package-lock.json` (aucun import dans le code source) → CANDIDAT À SUPPRIMER
+./reports/AUDIT_SUMMARY.md:npm uninstall @mdxeditor/editor @reactuses/core z-ai-web-dev-sdk
+./reports/AUDIT_SUMMARY.md:git commit -m "chore: remove unused deps @mdxeditor, @reactuses, z-ai-web-dev-sdk"
+./reports/AUDIT_SUMMARY.md:- `reports/mdxeditor-search.txt`, `reports/reactuses-search.txt`, `reports/zai-search.txt` — recherches détaillées pour paquets zombies
