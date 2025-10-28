@@ -1,3 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------
+// Core models (initial scaffold)
+// ---------------------------
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String?
+  name         String?
+  phone        String?   @unique
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // relations
+  staff        Staff?
+  loyalty      LoyaltyAccount?
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Restaurant {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  address     String?
+  city        String?
+  country     String?
+  timezone    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tables      Table[]
+  menus       Menu[]
+  staff       Staff[]
+  stocks      Stock[]
+}
+
+model Table {
+  id           String   @id @default(cuid())
+  restaurantId String
+  name         String
+  seats        Int
+  zone         String?
+  createdAt    DateTime @default(now())
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  orders      Order[]
+}
+
+model Menu {
+  id           String    @id @default(cuid())
+  restaurantId String
+  title        String
+  published    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  categories MenuCategory[]
+}
+
+model MenuCategory {
+  id      String   @id @default(cuid())
+  menuId  String
+  name    String
+  order   Int      @default(0)
+
+  menu     Menu    @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  products Product[]
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  sku          String?  @unique
+  basePrice    Float
+  categoryId   String?
+  createdAt    DateTime @default(now())
+
+  category MenuCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  orderItems OrderItem[]
+}
+
+model Order {
+  id            String    @id @default(cuid())
+  restaurantId  String
+  tableId       String?
+  userId        String?
+  status        String    @default("pending")
+  totalAmount   Float     @default(0)
+  placedAt      DateTime  @default(now())
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  table      Table?     @relation(fields: [tableId], references: [id], onDelete: SetNull)
+  user       User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items      OrderItem[]
+  payments   PaymentTransaction[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  qty       Int
+  unitPrice Float
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+}
+
+model PaymentTransaction {
+  id          String   @id @default(cuid())
+  orderId     String
+  provider    String
+  providerRef String?
+  amount      Float
+  currency    String  @default("EUR")
+  status      String  @default("pending")
+  createdAt   DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Stock {
+  id           String   @id @default(cuid())
+  restaurantId String
+  ingredientId String
+  qty          Float    @default(0)
+  threshold    Float? 
+  updatedAt    DateTime @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+model Ingredient {
+  id         String  @id @default(cuid())
+  name       String
+  unit       String
+  allergens  Json?
+  createdAt  DateTime @default(now())
+  suppliers  Supplier[]
+}
+
+model Supplier {
+  id        String  @id @default(cuid())
+  name      String
+  contact   Json?
+  createdAt DateTime @default(now())
+}
+
+model StockMovement {
+  id        String   @id @default(cuid())
+  stockId   String
+  type      String
+  qty       Float
+  reason    String?
+  createdAt DateTime @default(now())
+
+  // relation
+  // stock relation omitted intentionally to avoid circular burden in first pass
+}
+
+model Staff {
+  id           String   @id @default(cuid())
+  userId       String
+  restaurantId String
+  role         String
+  createdAt    DateTime @default(now())
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+model LoyaltyAccount {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  points     Int      @default(0)
+  tier       String?
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------
+// Indexes & Notes
+// ---------------------------
+
+@@index([restaurantId, createdAt])
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
