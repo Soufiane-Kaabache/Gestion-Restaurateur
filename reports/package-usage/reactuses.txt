@@ -1,4 +1,4 @@
 ./reports/AUDIT_SUMMARY.md:   - `@reactuses/core` — présent uniquement dans les manifests, pas d'import détecté → CANDIDAT À SUPPRIMER
-./reports/AUDIT_SUMMARY.md:npm uninstall @mdxeditor/editor @reactuses/core z-ai-web-dev-sdk
-./reports/AUDIT_SUMMARY.md:git commit -m "chore: remove unused deps @mdxeditor, @reactuses, z-ai-web-dev-sdk"
-./reports/AUDIT_SUMMARY.md:- `reports/mdxeditor-search.txt`, `reports/reactuses-search.txt`, `reports/zai-search.txt` — recherches détaillées pour paquets zombies
+./reports/AUDIT_SUMMARY.md:npm uninstall @mdxeditor/editor @reactuses/core
+./reports/AUDIT_SUMMARY.md:git commit -m "chore: remove unused deps @mdxeditor, @reactuses"
+./reports/AUDIT_SUMMARY.md:- `reports/mdxeditor-search.txt`, `reports/reactuses-search.txt` — recherches détaillées pour paquets zombies

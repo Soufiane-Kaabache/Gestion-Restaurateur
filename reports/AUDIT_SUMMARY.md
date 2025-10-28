@@ -30,22 +30,22 @@ Ce document résume l'audit rapide réalisé (recherches, fichiers volumineux, p
 
 2. Paquets potentiellement inutilisés ("zombies")
 
-   Résultats des recherches (grep dans le repo) :
-   - `@mdxeditor/editor` — présent uniquement dans `package.json` / `package-lock.json` (aucun import dans le code source) → CANDIDAT À SUPPRIMER
-   - `@reactuses/core` — présent uniquement dans les manifests, pas d'import détecté → CANDIDAT À SUPPRIMER
-   - `z-ai-web-dev-sdk` — présent uniquement dans les manifests, pas d'import détecté → CANDIDAT À SUPPRIMER
+Résultats des recherches (grep dans le repo) :
 
-   Les autres paquets suspects inspectés sont utilisés (ex. `vaul`, `sonner`, `cmdk`, `recharts`, `embla-carousel-react`, `input-otp`). Voir `reports/package-usage/all.txt`.
+- `@mdxeditor/editor` — présent uniquement dans `package.json` / `package-lock.json` (aucun import dans le code source) → CANDIDAT À SUPPRIMER
+- `@reactuses/core` — présent uniquement dans les manifests, pas d'import détecté → CANDIDAT À SUPPRIMER
+
+Les autres paquets suspects inspectés sont utilisés (ex. `vaul`, `sonner`, `cmdk`, `recharts`, `embla-carousel-react`, `input-otp`). Voir `reports/package-usage/all.txt`.
 
 ## 🟢 Actions recommandées (plan en 3 phases)
 
 PHASE 1 — Sécurité & ménage léger (immédiat)
 
-- Supprimer les paquets confirmés inutilisés (les 3 ci‑dessus). Commandes proposées :
+- Supprimer les paquets confirmés inutilisés. Commandes proposées :
 
 ```bash
 # supprimer des dépendances depuis la racine du projet
-npm uninstall @mdxeditor/editor @reactuses/core z-ai-web-dev-sdk
+npm uninstall @mdxeditor/editor @reactuses/core
 
 # mettre à jour le lockfile
 npm install
@@ -58,7 +58,7 @@ npx depcheck --skip-missing > reports/audit-deps.json || true
 
 ```bash
 git add package.json package-lock.json
-git commit -m "chore: remove unused deps @mdxeditor, @reactuses, z-ai-web-dev-sdk"
+git commit -m "chore: remove unused deps @mdxeditor, @reactuses"
 git push origin main
 ```
 
@@ -93,7 +93,7 @@ npx ts-prune --error > reports/audit-exports.txt 2>&1 || true
 - `reports/audit-todos.txt` — TODO/FIXME (vide)
 - `reports/audit-bigfiles.txt` — fichiers > 300 lignes (à traiter en priorité)
 - `reports/package-usage/all.txt` — résultats grep pour packages suspects
-- `reports/mdxeditor-search.txt`, `reports/reactuses-search.txt`, `reports/zai-search.txt` — recherches détaillées pour paquets zombies
+- `reports/mdxeditor-search.txt`, `reports/reactuses-search.txt` — recherches détaillées pour paquets zombies
 
 ## Prochaine action souhaitée ?
 

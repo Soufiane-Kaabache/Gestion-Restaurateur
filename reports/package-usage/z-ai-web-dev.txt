@@ -1,3 +1,2 @@
-./reports/AUDIT_SUMMARY.md:   - `z-ai-web-dev-sdk` — présent uniquement dans les manifests, pas d'import détecté → CANDIDAT À SUPPRIMER
-./reports/AUDIT_SUMMARY.md:npm uninstall @mdxeditor/editor @reactuses/core z-ai-web-dev-sdk
-./reports/AUDIT_SUMMARY.md:git commit -m "chore: remove unused deps @mdxeditor, @reactuses, z-ai-web-dev-sdk"
+REMOVED: references to z-ai-web-dev-sdk have been cleaned from reports/AUDIT_SUMMARY.md
+
