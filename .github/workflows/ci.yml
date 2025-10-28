@@ -7,31 +7,72 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: pnpm/action-setup@v2
-        with:
-          version: 18
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      - name: Run tests
-        run: pnpm exec vitest run --reporter verbose
-
-      - name: Typecheck
-        run: pnpm exec tsc --noEmit
 name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout du code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Configuration de Node.js (version 20 LTS) + pnpm
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # 3. Installation des dépendances (avec cache)
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 4. Cache Next.js (optimisation des builds)
+      - name: Cache Next.js
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-nextjs-
+
+      # 5. Linting (ESLint)
+      - name: Lint
+        run: pnpm lint
+
+      # 6. TypeCheck (avec Prisma)
+      - name: Generate Prisma Client
+        run: pnpm exec prisma generate
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      # 7. Build Next.js (validation de la production)
+      - name: Build
+        run: pnpm build
+
+      # 8. Tests Vitest (avec rapport verbeux)
+      - name: Run tests
+        run: pnpm exec vitest run --reporter verbose
+
+      # 9. (Optionnel) Rapport de couverture
+      - name: Coverage report
+        if: success()
+        run: pnpm exec vitest run --coverage
   test:
     runs-on: ubuntu-latest
     steps:
