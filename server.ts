@@ -1,5 +1,6 @@
 // server.ts - Next.js Standalone + Socket.IO
 import { setupSocket } from '@/lib/socket';
+import { validateMailConfig } from '@/lib/validate-mail-config';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import next from 'next';
@@ -11,6 +12,9 @@ const hostname = process.env.HOST || '127.0.0.1';
 // Custom server with Socket.IO integration
 async function createCustomServer() {
   try {
+    // Validate Mailtrap configuration early in dev/staging
+    // This will exit the process with code 1 if Mailtrap credentials are missing.
+    validateMailConfig();
     // Create Next.js app
     const nextApp = next({
       dev,
