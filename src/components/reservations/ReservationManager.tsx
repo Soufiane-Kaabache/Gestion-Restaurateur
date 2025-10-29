@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Search, 
+import { useState, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Search,
   Filter,
   Plus,
   Calendar,
@@ -19,116 +19,150 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  Clock
-} from 'lucide-react'
-import { ReservationCalendar } from './ReservationCalendar'
-import { ReservationForm, ReservationData } from './ReservationForm'
-import { TableData } from '@/components/tables/TableCard'
+  Clock,
+} from 'lucide-react';
+import { ReservationCalendar } from './ReservationCalendar';
+import { alert } from '@/lib/sweetalert';
+import { ReservationForm, ReservationData } from './ReservationForm';
+import { TableData } from '@/components/tables/TableCard';
 
 interface ReservationManagerProps {
-  reservations: ReservationData[]
-  tables: TableData[]
-  onReservationUpdate?: (reservation: ReservationData) => void
-  onReservationCreate?: (reservation: Omit<ReservationData, 'id'>) => void
-  onReservationDelete?: (reservationId: string) => void
+  reservations: ReservationData[];
+  tables: TableData[];
+  onReservationUpdate?: (reservation: ReservationData) => void;
+  onReservationCreate?: (reservation: Omit<ReservationData, 'id'>) => void;
+  onReservationDelete?: (reservationId: string) => void;
 }
 
-export function ReservationManager({ 
-  reservations, 
+export function ReservationManager({
+  reservations,
   tables,
-  onReservationUpdate, 
-  onReservationCreate, 
-  onReservationDelete 
+  onReservationUpdate,
+  onReservationCreate,
+  onReservationDelete,
 }: ReservationManagerProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState<string>('all')
-  const [selectedDate, setSelectedDate] = useState<string>('')
-  const [showForm, setShowForm] = useState(false)
-  const [editingReservation, setEditingReservation] = useState<ReservationData | null>(null)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [showForm, setShowForm] = useState(false);
+  const [editingReservation, setEditingReservation] = useState<ReservationData | null>(null);
 
-  const filteredReservations = reservations.filter(reservation => {
-    const matchesSearch = reservation.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         reservation.customerPhone.includes(searchTerm) ||
-                         reservation.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = selectedStatus === 'all' || reservation.status === selectedStatus
-    const matchesDate = !selectedDate || 
-                       new Date(reservation.date).toDateString() === new Date(selectedDate).toDateString()
-    
-    return matchesSearch && matchesStatus && matchesDate
-  })
+  const filteredReservations = reservations.filter((reservation) => {
+    const matchesSearch =
+      reservation.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reservation.customerPhone.includes(searchTerm) ||
+      reservation.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = selectedStatus === 'all' || reservation.status === selectedStatus;
+    const matchesDate =
+      !selectedDate ||
+      new Date(reservation.date).toDateString() === new Date(selectedDate).toDateString();
+
+    return matchesSearch && matchesStatus && matchesDate;
+  });
 
   const handleEdit = useCallback((reservation: ReservationData) => {
-    setEditingReservation(reservation)
-    setShowForm(true)
-  }, [])
+    setEditingReservation(reservation);
+    setShowForm(true);
+  }, []);
 
-  const handleDelete = useCallback((reservationId: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
-      onReservationDelete?.(reservationId)
-    }
-  }, [onReservationDelete])
+  const handleDelete = useCallback(
+    async (reservationId: string) => {
+      const result = await alert.confirm(
+        'Confirmer la suppression',
+        'Êtes-vous sûr de vouloir supprimer cette réservation ?',
+      );
+      if (result.isConfirmed) {
+        onReservationDelete?.(reservationId);
+      }
+    },
+    [onReservationDelete],
+  );
 
-  const handleCreate = useCallback((reservationData: Omit<ReservationData, 'id'>) => {
-    onReservationCreate?.(reservationData)
-    setShowForm(false)
-    setEditingReservation(null)
-  }, [onReservationCreate])
+  const handleCreate = useCallback(
+    (reservationData: Omit<ReservationData, 'id'>) => {
+      onReservationCreate?.(reservationData);
+      setShowForm(false);
+      setEditingReservation(null);
+    },
+    [onReservationCreate],
+  );
 
-  const handleUpdate = useCallback((reservationData: ReservationData) => {
-    onReservationUpdate?.(reservationData)
-    setShowForm(false)
-    setEditingReservation(null)
-  }, [onReservationUpdate])
+  const handleUpdate = useCallback(
+    (reservationData: ReservationData) => {
+      onReservationUpdate?.(reservationData);
+      setShowForm(false);
+      setEditingReservation(null);
+    },
+    [onReservationUpdate],
+  );
 
   const getStatusColor = (status: ReservationData['status']) => {
     switch (status) {
-      case 'EN_ATTENTE': return 'bg-yellow-100 text-yellow-800'
-      case 'CONFIRMEE': return 'bg-green-100 text-green-800'
-      case 'ANNULEE': return 'bg-red-100 text-red-800'
-      case 'TERMINEE': return 'bg-gray-100 text-gray-800'
-      case 'NO_SHOW': return 'bg-orange-100 text-orange-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'EN_ATTENTE':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'CONFIRMEE':
+        return 'bg-green-100 text-green-800';
+      case 'ANNULEE':
+        return 'bg-red-100 text-red-800';
+      case 'TERMINEE':
+        return 'bg-gray-100 text-gray-800';
+      case 'NO_SHOW':
+        return 'bg-orange-100 text-orange-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getStatusIcon = (status: ReservationData['status']) => {
     switch (status) {
-      case 'EN_ATTENTE': return <AlertCircle className="h-4 w-4" />
-      case 'CONFIRMEE': return <CheckCircle className="h-4 w-4" />
-      case 'ANNULEE': return <XCircle className="h-4 w-4" />
-      case 'TERMINEE': return <CheckCircle className="h-4 w-4" />
-      case 'NO_SHOW': return <XCircle className="h-4 w-4" />
-      default: return null
+      case 'EN_ATTENTE':
+        return <AlertCircle className="h-4 w-4" />;
+      case 'CONFIRMEE':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'ANNULEE':
+        return <XCircle className="h-4 w-4" />;
+      case 'TERMINEE':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'NO_SHOW':
+        return <XCircle className="h-4 w-4" />;
+      default:
+        return null;
     }
-  }
+  };
 
   const getStatusText = (status: ReservationData['status']) => {
     switch (status) {
-      case 'EN_ATTENTE': return 'En attente'
-      case 'CONFIRMEE': return 'Confirmée'
-      case 'ANNULEE': return 'Annulée'
-      case 'TERMINEE': return 'Terminée'
-      case 'NO_SHOW': return 'No-show'
-      default: return status
+      case 'EN_ATTENTE':
+        return 'En attente';
+      case 'CONFIRMEE':
+        return 'Confirmée';
+      case 'ANNULEE':
+        return 'Annulée';
+      case 'TERMINEE':
+        return 'Terminée';
+      case 'NO_SHOW':
+        return 'No-show';
+      default:
+        return status;
     }
-  }
+  };
 
   const getStats = () => {
-    const total = reservations.length
-    const enAttente = reservations.filter(r => r.status === 'EN_ATTENTE').length
-    const confirmees = reservations.filter(r => r.status === 'CONFIRMEE').length
-    const annulees = reservations.filter(r => r.status === 'ANNULEE').length
-    const today = reservations.filter(r => {
-      const today = new Date()
-      const reservationDate = new Date(r.date)
-      return reservationDate.toDateString() === today.toDateString()
-    }).length
-    const totalGuests = reservations.reduce((sum, r) => sum + r.guests, 0)
+    const total = reservations.length;
+    const enAttente = reservations.filter((r) => r.status === 'EN_ATTENTE').length;
+    const confirmees = reservations.filter((r) => r.status === 'CONFIRMEE').length;
+    const annulees = reservations.filter((r) => r.status === 'ANNULEE').length;
+    const today = reservations.filter((r) => {
+      const today = new Date();
+      const reservationDate = new Date(r.date);
+      return reservationDate.toDateString() === today.toDateString();
+    }).length;
+    const totalGuests = reservations.reduce((sum, r) => sum + r.guests, 0);
 
-    return { total, enAttente, confirmees, annulees, today, totalGuests }
-  }
+    return { total, enAttente, confirmees, annulees, today, totalGuests };
+  };
 
-  const stats = getStats()
+  const stats = getStats();
 
   return (
     <div className="space-y-6">
@@ -137,7 +171,8 @@ export function ReservationManager({
         <div>
           <h2 className="text-2xl font-bold">Gestion des réservations</h2>
           <p className="text-gray-600">
-            {stats.total} réservations • {stats.today} aujourd'hui • {stats.totalGuests} couverts totaux
+            {stats.total} réservations • {stats.today} aujourd'hui • {stats.totalGuests} couverts
+            totaux
           </p>
         </div>
         <Button onClick={() => setShowForm(true)}>
@@ -220,7 +255,7 @@ export function ReservationManager({
                     className="pl-10"
                   />
                 </div>
-                
+
                 <div className="flex gap-2">
                   <input
                     type="date"
@@ -228,7 +263,7 @@ export function ReservationManager({
                     onChange={(e) => setSelectedDate(e.target.value)}
                     className="px-3 py-2 border rounded-md"
                   />
-                  
+
                   <select
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
@@ -295,9 +330,7 @@ export function ReservationManager({
                             {reservation.time}
                           </div>
                         </td>
-                        <td className="p-4">
-                          Table {reservation.table.number}
-                        </td>
+                        <td className="p-4">Table {reservation.table.number}</td>
                         <td className="p-4">
                           <div className="flex items-center gap-1">
                             <Users className="h-3 w-3 text-gray-400" />
@@ -305,7 +338,9 @@ export function ReservationManager({
                           </div>
                         </td>
                         <td className="p-4">
-                          <Badge className={`flex items-center gap-1 ${getStatusColor(reservation.status)}`}>
+                          <Badge
+                            className={`flex items-center gap-1 ${getStatusColor(reservation.status)}`}
+                          >
                             {getStatusIcon(reservation.status)}
                             {getStatusText(reservation.status)}
                           </Badge>
@@ -358,11 +393,11 @@ export function ReservationManager({
           tables={tables}
           onSubmit={editingReservation ? handleUpdate : handleCreate}
           onCancel={() => {
-            setShowForm(false)
-            setEditingReservation(null)
+            setShowForm(false);
+            setEditingReservation(null);
           }}
         />
       )}
     </div>
-  )
+  );
 }

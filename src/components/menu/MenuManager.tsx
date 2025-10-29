@@ -10,6 +10,7 @@ import { Plus, Search, Filter, Grid3X3, List, Star, TrendingUp, Eye, Edit } from
 import { ProductCard, ProductData } from './ProductCard';
 import { ProductForm } from './ProductForm';
 import { CategoryForm, CategoryData } from './CategoryForm';
+import { alert } from '@/lib/sweetalert';
 
 interface MenuManagerProps {
   products: ProductData[];
@@ -85,8 +86,12 @@ export function MenuManager({
   }, []);
 
   const handleProductDelete = useCallback(
-    (productId: string) => {
-      if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+    async (productId: string) => {
+      const result = await alert.confirm(
+        'Confirmer la suppression',
+        'Êtes-vous sûr de vouloir supprimer ce produit ?',
+      );
+      if (result.isConfirmed) {
         onProductDelete?.(productId);
       }
     },
@@ -117,8 +122,12 @@ export function MenuManager({
   }, []);
 
   const handleCategoryDelete = useCallback(
-    (categoryId: string) => {
-      if (confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
+    async (categoryId: string) => {
+      const result = await alert.confirm(
+        'Confirmer la suppression',
+        'Êtes-vous sûr de vouloir supprimer cette catégorie ?',
+      );
+      if (result.isConfirmed) {
         onCategoryDelete?.(categoryId);
       }
     },

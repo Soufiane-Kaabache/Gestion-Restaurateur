@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Plus, Minus, Trash2, Search, Clock, Users, DollarSign } from 'lucide-react';
 import { ProductData } from '@/components/menu/ProductCard';
 import { TableData } from '@/components/tables/TableCard';
+import { toast } from '@/lib/sweetalert';
 
 export interface OrderItem {
   id: string;
@@ -140,7 +141,7 @@ export function OrderForm({ table, products, initialOrder, onSubmit, onCancel }:
 
   const handleSubmit = () => {
     if (orderItems.length === 0) {
-      alert('Veuillez ajouter au moins un produit à la commande');
+      toast.error('Veuillez ajouter au moins un produit à la commande');
       return;
     }
 

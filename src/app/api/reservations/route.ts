@@ -67,11 +67,28 @@ export async function POST(req: Request) {
       }).catch((err) => console.error('Erreur notification personnel:', err));
     }
 
-    return NextResponse.json({ success: true, reservation });
+    return NextResponse.json({ success: true, reservation }, { status: 201 });
   } catch (error) {
     console.error('Erreur création réservation:', error);
     return NextResponse.json(
       { error: 'Erreur lors de la création de la réservation' },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    // basic listing with recent first
+    const reservations = await (db as any).reservation.findMany({
+      orderBy: { date: 'desc' },
+      take: 100,
+    });
+    return NextResponse.json({ reservations }, { status: 200 });
+  } catch (error) {
+    console.error('Erreur listing reservations:', error);
+    return NextResponse.json(
+      { error: 'Erreur lors de la récupération des réservations' },
       { status: 500 },
     );
   }

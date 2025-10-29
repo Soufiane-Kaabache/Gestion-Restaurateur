@@ -1,0 +1,18 @@
+nohup: les entrées sont ignorées
+
+> nextjs_tailwind_shadcn_ts@0.1.0 start /home/soufiane/Bureau/Gestion Restaurateur
+> NODE_ENV=production tsx server.ts 2>&1 | tee server.log
+
+⚠️ MAIL_FROM_ADDRESS non défini — utilisé par défaut: noreply@restaurant.local
+⚠️ Emails personnel manquants: MANAGER_EMAIL, BARTENDER_EMAIL, WAITER_EMAIL, KITCHEN_EMAIL
+→ Les notifications pour ces rôles ne seront pas envoyées
+✅ Configuration Mailtrap OK
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /home/soufiane/pnpm-lock.yaml as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /home/soufiane/Bureau/Gestion Restaurateur/pnpm-lock.yaml
+
+> Ready on http://127.0.0.1:3000
+> Socket.IO server running at ws://127.0.0.1:3000/api/socketio

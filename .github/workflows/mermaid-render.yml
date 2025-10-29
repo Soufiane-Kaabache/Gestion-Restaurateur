@@ -1,0 +1,51 @@
+name: "🎨 Render ERD Diagrams"
+
+on:
+  push:
+    paths:
+      - 'docs/erd/**/*.md'
+  pull_request:
+    paths:
+      - 'docs/erd/**/*.md'
+
+jobs:
+  render-mermaid:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Mermaid CLI
+        run: npm install -g @mermaid-js/mermaid-cli
+
+      - name: Render diagrams
+        run: |
+          mkdir -p docs/erd/images
+          for file in docs/erd/*.md; do
+            filename=$(basename "$file" .md)
+            # render only if file contains mermaid code block
+            if grep -q "```mermaid" "$file" ; then
+              mmdc -i "$file" \
+                   -o "docs/erd/images/${filename}.png" \
+                   -t default \
+                   -b transparent \
+                   --scale 2 || true
+            fi
+          done
+
+      - name: Commit rendered images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/erd/images/*.png || true
+          git diff --staged --quiet || (git commit -m "docs: auto-render ERD diagrams [skip ci]" && git push)

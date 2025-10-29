@@ -1,87 +1,108 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Plus, 
-  Search, 
+import { useState, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Plus,
+  Search,
   Filter,
   Grid3X3,
   List,
   Users,
   Utensils,
   Calendar,
-  Clock
-} from 'lucide-react'
-import { TableCard, TableData } from './TableCard'
-import { TableForm } from './TableForm'
+  Clock,
+} from 'lucide-react';
+import { TableCard, TableData } from './TableCard';
+import { alert } from '@/lib/sweetalert';
+import { TableForm } from './TableForm';
 
 interface TableGridProps {
-  tables: TableData[]
-  onTableUpdate?: (table: TableData) => void
-  onTableCreate?: (table: Omit<TableData, 'id'>) => void
-  onTableDelete?: (tableId: string) => void
-  onTableSelect?: (table: TableData) => void
+  tables: TableData[];
+  onTableUpdate?: (table: TableData) => void;
+  onTableCreate?: (table: Omit<TableData, 'id'>) => void;
+  onTableDelete?: (tableId: string) => void;
+  onTableSelect?: (table: TableData) => void;
 }
 
-export function TableGrid({ 
-  tables, 
-  onTableUpdate, 
-  onTableCreate, 
+export function TableGrid({
+  tables,
+  onTableUpdate,
+  onTableCreate,
   onTableDelete,
-  onTableSelect 
+  onTableSelect,
 }: TableGridProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [editingTable, setEditingTable] = useState<TableData | null>(null)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingTable, setEditingTable] = useState<TableData | null>(null);
 
-  const filteredTables = tables.filter(table => {
-    const matchesSearch = table.number.toString().includes(searchTerm) ||
-                         table.section?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = selectedStatus === 'all' || table.status === selectedStatus
-    return matchesSearch && matchesStatus
-  })
+  const filteredTables = tables.filter((table) => {
+    const matchesSearch =
+      table.number.toString().includes(searchTerm) ||
+      table.section?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = selectedStatus === 'all' || table.status === selectedStatus;
+    return matchesSearch && matchesStatus;
+  });
 
-  const handleStatusChange = useCallback((tableId: string, newStatus: TableData['status']) => {
-    const table = tables.find(t => t.id === tableId)
-    if (table) {
-      onTableUpdate?.({ ...table, status: newStatus })
-    }
-  }, [tables, onTableUpdate])
+  const handleStatusChange = useCallback(
+    (tableId: string, newStatus: TableData['status']) => {
+      const table = tables.find((t) => t.id === tableId);
+      if (table) {
+        onTableUpdate?.({ ...table, status: newStatus });
+      }
+    },
+    [tables, onTableUpdate],
+  );
 
   const handleEdit = useCallback((table: TableData) => {
-    setEditingTable(table)
-    setShowCreateForm(true)
-  }, [])
+    setEditingTable(table);
+    setShowCreateForm(true);
+  }, []);
 
-  const handleDelete = useCallback((tableId: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette table ?')) {
-      onTableDelete?.(tableId)
-    }
-  }, [onTableDelete])
+  const handleDelete = useCallback(
+    async (tableId: string) => {
+      const result = await alert.confirm(
+        'Confirmer la suppression',
+        'Êtes-vous sûr de vouloir supprimer cette table ?',
+      );
+      if (result.isConfirmed) {
+        onTableDelete?.(tableId);
+      }
+    },
+    [onTableDelete],
+  );
 
-  const handleCreateTable = useCallback((tableData: Omit<TableData, 'id'>) => {
-    onTableCreate?.(tableData)
-    setShowCreateForm(false)
-  }, [onTableCreate])
+  const handleCreateTable = useCallback(
+    (tableData: Omit<TableData, 'id'>) => {
+      onTableCreate?.(tableData);
+      setShowCreateForm(false);
+    },
+    [onTableCreate],
+  );
 
-  const handleUpdateTable = useCallback((tableData: TableData) => {
-    onTableUpdate?.(tableData)
-    setEditingTable(null)
-    setShowCreateForm(false)
-  }, [onTableUpdate])
+  const handleUpdateTable = useCallback(
+    (tableData: TableData) => {
+      onTableUpdate?.(tableData);
+      setEditingTable(null);
+      setShowCreateForm(false);
+    },
+    [onTableUpdate],
+  );
 
   const getStatusStats = () => {
-    const stats = tables.reduce((acc, table) => {
-      acc[table.status] = (acc[table.status] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const stats = tables.reduce(
+      (acc, table) => {
+        acc[table.status] = (acc[table.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     return [
       { status: 'all', label: 'Toutes', count: tables.length, icon: Grid3X3 },
@@ -89,10 +110,10 @@ export function TableGrid({
       { status: 'OCCUPEE', label: 'Occupées', count: stats.OCCUPEE || 0, icon: Utensils },
       { status: 'RESERVEE', label: 'Réservées', count: stats.RESERVEE || 0, icon: Calendar },
       { status: 'A_NETTOYER', label: 'À nettoyer', count: stats.A_NETTOYER || 0, icon: Clock },
-    ]
-  }
+    ];
+  };
 
-  const statusStats = getStatusStats()
+  const statusStats = getStatusStats();
 
   return (
     <div className="space-y-6">
@@ -101,7 +122,8 @@ export function TableGrid({
         <div>
           <h2 className="text-2xl font-bold">Gestion des tables</h2>
           <p className="text-gray-600">
-            {tables.length} tables au total • {statusStats.find(s => s.status === 'LIBRE')?.count || 0} disponibles
+            {tables.length} tables au total •{' '}
+            {statusStats.find((s) => s.status === 'LIBRE')?.count || 0} disponibles
           </p>
         </div>
         <Button onClick={() => setShowCreateForm(true)} className="flex items-center gap-2">
@@ -113,7 +135,7 @@ export function TableGrid({
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {statusStats.map(({ status, label, count, icon: Icon }) => (
-          <Card 
+          <Card
             key={status}
             className={`cursor-pointer transition-all ${
               selectedStatus === status ? 'ring-2 ring-blue-500' : ''
@@ -202,9 +224,7 @@ export function TableGrid({
                       <td className="p-4">{table.capacity} personnes</td>
                       <td className="p-4">{table.section || '-'}</td>
                       <td className="p-4">
-                        <Badge variant="secondary">
-                          {table.status}
-                        </Badge>
+                        <Badge variant="secondary">{table.status}</Badge>
                       </td>
                       <td className="p-4">
                         {table.currentOrder ? (
@@ -257,11 +277,11 @@ export function TableGrid({
           table={editingTable}
           onSubmit={editingTable ? handleUpdateTable : handleCreateTable}
           onCancel={() => {
-            setShowCreateForm(false)
-            setEditingTable(null)
+            setShowCreateForm(false);
+            setEditingTable(null);
           }}
         />
       )}
     </div>
-  )
+  );
 }

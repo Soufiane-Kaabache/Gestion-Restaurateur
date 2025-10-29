@@ -1,0 +1,31 @@
+SET
+CREATE INDEX
+CREATE INDEX
+psql:prisma/migrations/sql/002_indexes_p0.sql:31: ERROR:  column "customer_id" does not exist
+CREATE INDEX
+CREATE INDEX
+psql:prisma/migrations/sql/002_indexes_p0.sql:51: ERROR:  column "cuisine_id" does not exist
+CREATE INDEX
+CREATE INDEX
+psql:prisma/migrations/sql/002_indexes_p0.sql:80: ERROR:  generation expression is not immutable
+psql:prisma/migrations/sql/002_indexes_p0.sql:83: ERROR:  column "search_vector" does not exist
+ schemaname |     tablename      |             indexname              |                                                                                                 indexdef                                                                                                 
+------------+--------------------+------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ public     | dishes             | idx_dishes_restaurant_category     | CREATE INDEX idx_dishes_restaurant_category ON public.dishes USING btree (restaurant_id, category_id, is_available) WHERE (deleted_at IS NULL)
+ public     | order_items        | idx_order_items_order_id           | CREATE INDEX idx_order_items_order_id ON public.order_items USING btree (order_id) WHERE (deleted_at IS NULL)
+ public     | orders             | idx_orders_restaurant_status       | CREATE INDEX idx_orders_restaurant_status ON public.orders USING btree (restaurant_id, status, created_at DESC) WHERE (deleted_at IS NULL)
+ public     | restaurant_metrics | idx_metrics_restaurant_type_period | CREATE INDEX idx_metrics_restaurant_type_period ON public.restaurant_metrics USING btree (restaurant_id, metric_type, period DESC) WHERE (deleted_at IS NULL)
+ public     | restaurant_stock   | idx_stock_restaurant_alert         | CREATE INDEX idx_stock_restaurant_alert ON public.restaurant_stock USING btree (restaurant_id, current_quantity, alert_threshold) WHERE ((deleted_at IS NULL) AND (current_quantity <= alert_threshold))
+ public     | staff              | idx_staff_restaurant_role          | CREATE INDEX idx_staff_restaurant_role ON public.staff USING btree (restaurant_id, role, is_active) WHERE (deleted_at IS NULL)
+(6 rows)
+
+     tablename      | total_size | indexes_size 
+--------------------+------------+--------------
+ orders             | 24 kB      | 16 kB
+ staff              | 24 kB      | 16 kB
+ dishes             | 24 kB      | 16 kB
+ restaurant_metrics | 24 kB      | 16 kB
+ order_items        | 16 kB      | 16 kB
+ restaurant_stock   | 16 kB      | 16 kB
+(6 rows)
+
