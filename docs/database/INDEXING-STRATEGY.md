@@ -86,4 +86,8 @@ Notes: This is an initial draft; I have added ready-to-run SQL migrations and he
 - `scripts/deploy_indexes.sh` — safe deploy wrapper (backup for production, runs the migration, produces a log).
 - `scripts/verify_indexes.sh` — post-deploy verification (lists indexes, usage statistics, table sizes).
 
+-- Fixes were added in `prisma/migrations/sql/003_indexes_p0_fixes.sql` to: - create conditional indexes only when the referenced columns exist (prevents errors when schema differs), - replace the GENERATED tsvector column with a tsvector + trigger implementation for broader Postgres compatibility.
+
+- `prisma/migrations/sql/003_indexes_p0_fixes_rollback.sql` — rollback for the fixes (drops trigger, function, and conditional indexes).
+
 See the repository branch `db/indexes-p0-implementation` for the committed migration files and scripts.
