@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { sendReservationConfirmation, notifyNewReservation } from '@/lib/mailer';
 
 export async function POST(req: Request) {
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     // If tableId not provided, try to pick any existing table
     let finalTableId = tableId;
     if (!finalTableId) {
-      const anyTable = await db.table.findFirst();
+      const anyTable = await prisma.table.findFirst();
       if (!anyTable) {
         return NextResponse.json(
           { error: 'No table available, please create a table first' },
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       finalTableId = anyTable.id;
     }
 
-    const reservation = await db.reservation.create({
+    const reservation = await prisma.reservation.create({
       data: {
         customerName,
         customerEmail: customerEmail || undefined,
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     // basic listing with recent first
-    const reservations = await (db as any).reservation.findMany({
+    const reservations = await prisma.reservation.findMany({
       orderBy: { date: 'desc' },
       take: 100,
     });

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(req: Request) {
   try {
@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     const where: any = {};
     if (restaurantId) where.restaurantId = restaurantId;
 
-    const categories = await (db as any).category.findMany({ where, orderBy: { order: 'asc' } });
+    const categories = await prisma.category.findMany({ where, orderBy: { order: 'asc' } });
     return NextResponse.json({ categories }, { status: 200 });
   } catch (error) {
     console.error('Erreur categories GET:', error);

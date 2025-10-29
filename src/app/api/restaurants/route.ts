@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const restaurants = await (db as any).restaurant.findMany({ orderBy: { createdAt: 'desc' } });
+    const restaurants = await prisma.restaurant.findMany({ orderBy: { createdAt: 'desc' } });
     return NextResponse.json({ restaurants }, { status: 200 });
   } catch (error) {
     console.error('Erreur restaurants GET:', error);

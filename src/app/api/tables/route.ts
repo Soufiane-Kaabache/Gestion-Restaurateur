@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const tables = await (db as any).table.findMany({ orderBy: { number: 'asc' } });
+    const tables = await prisma.table.findMany({ orderBy: { number: 'asc' } });
     return NextResponse.json({ tables }, { status: 200 });
   } catch (error) {
     console.error('Erreur tables GET:', error);

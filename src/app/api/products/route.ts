@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(req: Request) {
   try {
@@ -13,8 +13,8 @@ export async function GET(req: Request) {
     if (restaurantId) where.restaurantId = restaurantId;
     if (categoryId) where.categoryId = categoryId;
 
-    const total = await (db as any).product.count({ where });
-    const products = await (db as any).product.findMany({
+    const total = await prisma.product.count({ where });
+    const products = await prisma.product.findMany({
       where,
       skip: (page - 1) * limit,
       take: limit,
