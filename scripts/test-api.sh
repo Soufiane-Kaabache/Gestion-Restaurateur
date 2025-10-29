@@ -9,7 +9,8 @@ echo "🧪 PHASE 3 : Tests API Complets"
 echo "================================"
 echo ""
 
-BASE_URL="http://127.0.0.1:3001"
+# Allow overriding BASE_URL from environment when running the script (fallback to 3001)
+BASE_URL="${BASE_URL:-http://127.0.0.1:3001}"
 OK=0
 FAIL=0
 TOTAL=0
